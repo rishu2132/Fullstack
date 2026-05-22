@@ -1,12 +1,19 @@
 import { useState } from 'react'
 
 
-const Result = (props) => {
+const Result = ({good , neutral , bad}) => {
+  const total = good + neutral + bad
+  const average = ((good * 1) + (neutral * 0) + (bad * -1))/3
+  const positive = ( good / total ) * 100
+
   return (
     <div>
-      <p>good: {props.good}</p>
-      <p>neutral: {props.neutral}</p>
-      <p>bad: {props.bad}</p>
+      <p>good: {good}</p>
+      <p>neutral: {  neutral}</p>
+      <p>bad: {bad}</p>
+      <p>All: {total}</p>
+      <p>Average: {average}</p>
+      <p>Positive: {positive}%</p>
     </div>
   )
 }
