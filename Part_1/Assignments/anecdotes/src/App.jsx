@@ -34,6 +34,7 @@ const App = () => {
   const voteCount = () => {
     const copy = [...votes]
     copy[selected]+=1
+    
     setVotes([...copy])
   }
 
