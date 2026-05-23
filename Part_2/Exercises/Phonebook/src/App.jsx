@@ -19,9 +19,6 @@ const App = () => {
     setSearchText(event.target.value)
   }
 
-  
-  
-
   const handleNewNames = (event) => {
    console.log(event.target.value)
    setNewName(event.target.value)   

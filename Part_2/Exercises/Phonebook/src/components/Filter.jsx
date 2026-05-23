@@ -1,6 +1,4 @@
 const Filter = ({searchText,handleWordFind}) =>{
-    
-
 
     return (
       <div>
