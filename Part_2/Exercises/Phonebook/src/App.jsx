@@ -34,7 +34,8 @@ const App = () => {
   const addPerson = (event) =>{
     event.preventDefault()
 
-    const nameExists = persons.some(person => person.name.toLowerCase() === newName.toLowerCase())
+    const nameExists = persons.some(person => person.name.trim().toLowerCase() === newName.trim().toLowerCase())
+    
     if(!nameExists){
       const personObject = {
         name: newName  ,
@@ -47,22 +48,32 @@ const App = () => {
       setNewNumber('')
     }
     else{
-      alert(`${newName} is already added to phonebook`)
-      setNewName('')
-      setNewNumber('')
-    }
-   
-   
+      const numberSame = persons.filter(person => person.number.trim() !== newNumber.trim() && person.name.trim().toLowerCase() === newName.trim().toLowerCase())
+
+      if (window.confirm(`${numberSame[0].name} is already added to phonebook, replace old number with a new one?`)){
+        const newObject = {
+        ...numberSame[0],number: newNumber
+      }
+
+      
+      personService
+        .update(newObject.id,newObject)
+        .then(returnedNumber => setPersons(persons.map(person => person.id === newObject.id ? returnedNumber:person)))
+      }
+      } 
+      
   }
 
-  const filteredPerson = searchText ? persons.filter(person => person.name.trim().toLowerCase().includes(searchText.toLowerCase())) : persons
+  const filteredPerson = searchText ? persons.filter(person => person.name.toLowerCase().includes(searchText.toLowerCase())) : persons
 
   const deleteNumberOf = (id) => {
     console.log(id,'deleted')
-    
-    personService
+    if (window.confirm('Do you want to delete the number')){
+      personService
       .remove(id)
       .then(() => setPersons(persons.filter(p => p.id !== id)))
+    }
+    
   }
   
   return (
@@ -75,7 +86,7 @@ const App = () => {
       {filteredPerson.map(person => <Persons key={person.id} person={person} deleteNumber={()=>deleteNumberOf(person.id)}/>)}
     </div>
   )
-}
 
+}
 export default App
 
