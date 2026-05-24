@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import personService from './services/persons'
-
+import Notification from './components/Notification'
+import './index.css'
 
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [errorMessage, setErrorMessage] = useState('Nothing added yet')
 
   useEffect(()=>{
     personService
@@ -44,6 +46,12 @@ const App = () => {
       personService
         .create(personObject)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+        .then(()=>{
+          setErrorMessage(`Added ${personObject.name}`)
+          setTimeout(()=>{
+            setErrorMessage(null)
+          },5000)
+        })
       setNewName('')
       setNewNumber('')
     }
@@ -54,16 +62,22 @@ const App = () => {
 
       console.log(existingNumber)
       if(existingNumber){
-          if (window.confirm(`${existingNumber.name} is already added to phonebook, replace old number with a new one?`)){
-            
-            const newObject = {
-            ...existingNumber,number: newNumber
-            }
+        if (window.confirm(`${existingNumber.name} is already added to phonebook, replace old number with a new one?`)){
           
-            personService
-              .update(newObject.id,newObject)
-              .then(returnedNumber => setPersons(persons.map(person => person.id === newObject.id ? returnedNumber : person)))
+          const newObject = {
+          ...existingNumber,number: newNumber
           }
+        
+          personService
+            .update(newObject.id,newObject)
+            .then(returnedNumber => setPersons(persons.map(person => person.id === newObject.id ? returnedNumber : person)))
+            .then(()=>{
+              setErrorMessage(`Updated number of ${existingNumber.name}`)
+              setTimeout(()=> {
+                setErrorMessage(null)
+              },5000)
+            })
+        }
           
 
         }else{
@@ -90,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage}/>
       <Filter  searchText={searchText} handleWordFind={handleWordFind}/>
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNewNames={handleNewNames} handleNewNumbers={handleNewNumbers}/>
