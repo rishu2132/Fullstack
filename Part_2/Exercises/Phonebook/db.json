@@ -24,6 +24,11 @@
       "name": "Utka",
       "number": "24359662",
       "id": "AY3qQxlRrG4"
+    },
+    {
+      "name": "u",
+      "number": "3",
+      "id": "yxWNKdd-cf8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

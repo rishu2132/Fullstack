@@ -48,21 +48,32 @@ const App = () => {
       setNewNumber('')
     }
     else{
-      const numberSame = persons.filter(person => person.number.trim() !== newNumber.trim() && person.name.trim().toLowerCase() === newName.trim().toLowerCase())
-
-      if (window.confirm(`${numberSame[0].name} is already added to phonebook, replace old number with a new one?`)){
-        const newObject = {
-        ...numberSame[0],number: newNumber
-      }
+      const existingNumber = persons.find(person => person.number.trim() !== newNumber.trim() && person.name.trim().toLowerCase() === newName.trim().toLowerCase())
 
       
-      personService
-        .update(newObject.id,newObject)
-        .then(returnedNumber => setPersons(persons.map(person => person.id === newObject.id ? returnedNumber:person)))
-      }
-      } 
-      
+
+      console.log(existingNumber)
+      if(existingNumber){
+          if (window.confirm(`${existingNumber.name} is already added to phonebook, replace old number with a new one?`)){
+            
+            const newObject = {
+            ...existingNumber,number: newNumber
+            }
+          
+            personService
+              .update(newObject.id,newObject)
+              .then(returnedNumber => setPersons(persons.map(person => person.id === newObject.id ? returnedNumber : person)))
+          }
+          
+
+        }else{
+          alert(`${newName} is already added to phonebook`)
+          
+        }
+    setNewName('')
+    setNewNumber('')
   }
+}
 
   const filteredPerson = searchText ? persons.filter(person => person.name.toLowerCase().includes(searchText.toLowerCase())) : persons
 
