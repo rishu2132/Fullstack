@@ -5,6 +5,7 @@ import PersonForm from './components/PersonForm'
 import personService from './services/persons'
 
 
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
@@ -23,7 +24,6 @@ const App = () => {
   }
 
   const handleNewNames = (event) => {
-   console.log(event.target.value)
    setNewName(event.target.value)   
   }
 
@@ -34,7 +34,7 @@ const App = () => {
   const addPerson = (event) =>{
     event.preventDefault()
 
-    const nameExists = persons.some(person => person.name === newName)
+    const nameExists = persons.some(person => person.name.toLowerCase() === newName.toLowerCase())
     if(!nameExists){
       const personObject = {
         name: newName  ,
@@ -43,20 +43,26 @@ const App = () => {
       personService
         .create(personObject)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
-      
+      setNewName('')
+      setNewNumber('')
     }
     else{
       alert(`${newName} is already added to phonebook`)
+      setNewName('')
+      setNewNumber('')
     }
    
-    setNewName('')
-    setNewNumber('')
+   
   }
 
-  const personChange = searchText ? persons.filter(person => person.name.trim().toLowerCase().includes(searchText.toLowerCase())) : persons
+  const filteredPerson = searchText ? persons.filter(person => person.name.trim().toLowerCase().includes(searchText.toLowerCase())) : persons
 
   const deleteNumberOf = (id) => {
     console.log(id,'deleted')
+    
+    personService
+      .remove(id)
+      .then(() => setPersons(persons.filter(p => p.id !== id)))
   }
   
   return (
@@ -66,7 +72,7 @@ const App = () => {
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNewNames={handleNewNames} handleNewNumbers={handleNewNumbers}/>
       <h2>Numbers</h2>
-      {personChange.map(person => <Persons key={person.id} person={person} deleteNumber={()=>deleteNumberOf(person.id)}/>)}
+      {filteredPerson.map(person => <Persons key={person.id} person={person} deleteNumber={()=>deleteNumberOf(person.id)}/>)}
     </div>
   )
 }

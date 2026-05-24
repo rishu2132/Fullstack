@@ -21,29 +21,9 @@
       "id": "4"
     },
     {
-      "name": "utkarsh",
+      "name": "Utka",
       "number": "",
-      "id": "i5Ay8Hptg5E"
-    },
-    {
-      "name": "js",
-      "number": "9801434",
-      "id": "DXAnwsMMvKk"
-    },
-    {
-      "name": "sulekha devi",
-      "number": "9123113593",
-      "id": "F-_FH8qjgSw"
-    },
-    {
-      "name": "jared",
-      "number": "1234231",
-      "id": "_fCobIR0mG8"
-    },
-    {
-      "name": "so la",
-      "number": "722829104",
-      "id": "qZ0cMXWmRbQ"
+      "id": "AY3qQxlRrG4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
