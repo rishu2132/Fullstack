@@ -21,16 +21,6 @@
       "id": "4"
     },
     {
-      "name": "Utka",
-      "number": "24359662",
-      "id": "AY3qQxlRrG4"
-    },
-    {
-      "name": "u",
-      "number": "235",
-      "id": "yxWNKdd-cf8"
-    },
-    {
       "name": "kther is o",
       "number": "925626",
       "id": "eONkmOtD8ig"
@@ -39,16 +29,6 @@
       "name": "kther'",
       "number": "",
       "id": "7u-ikbX-6bE"
-    },
-    {
-      "name": "kther",
-      "number": "431513415",
-      "id": "I1AZ3SmZzz4"
-    },
-    {
-      "name": "utkarsh",
-      "number": "034151345",
-      "id": "jA1Zt49Z6Oc"
     },
     {
       "name": "",
@@ -79,6 +59,11 @@
       "name": "tolu",
       "number": "",
       "id": "UcbI1WFrdDE"
+    },
+    {
+      "name": "utkar",
+      "number": "1352135",
+      "id": "GvmTr6qIJEE"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

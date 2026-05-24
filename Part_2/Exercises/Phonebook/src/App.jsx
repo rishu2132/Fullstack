@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchText, setSearchText] = useState('')
   const [errorMessage, setErrorMessage] = useState('Nothing added yet')
+  const [errorColor , setErrorColor] = useState('greenError')
 
   useEffect(()=>{
     personService
@@ -72,8 +73,16 @@ const App = () => {
             .update(newObject.id,newObject)
             .then(returnedNumber => setPersons(persons.map(person => person.id === newObject.id ? returnedNumber : person)))
             .then(()=>{
+              setErrorColor('greenError')
               setErrorMessage(`Updated number of ${existingNumber.name}`)
               setTimeout(()=> {
+                setErrorMessage(null)
+              },5000)
+            })
+            .catch(error => {
+              setErrorColor('redError')
+              setErrorMessage(`Information of ${existingNumber.name} has already been removed from server`)
+              setTimeout(()=>{
                 setErrorMessage(null)
               },5000)
             })
@@ -104,7 +113,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage}/>
+      <Notification status={errorColor} message={errorMessage}/>
       <Filter  searchText={searchText} handleWordFind={handleWordFind}/>
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNewNames={handleNewNames} handleNewNumbers={handleNewNumbers}/>
