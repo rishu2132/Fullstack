@@ -1,10 +1,11 @@
-const Persons = ({persons,searchText}) => {
-	
-  const personChange = searchText ? persons.filter(person => person.name.trim().toLowerCase().includes(searchText.toLowerCase())) : persons
+const Persons = ({person,deleteNumber}) => {
 	
 	return(
-		personChange.map(person => <p key={person.name}>{person.name} {person.number}</p>)
-	)
+		 <p >
+			{person.name} {person.number}
+			<button onClick={deleteNumber}>delete</button>
+		</p>)
+	
 }
 
 export default Persons

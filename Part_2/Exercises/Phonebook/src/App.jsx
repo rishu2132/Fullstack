@@ -52,6 +52,12 @@ const App = () => {
     setNewName('')
     setNewNumber('')
   }
+
+  const personChange = searchText ? persons.filter(person => person.name.trim().toLowerCase().includes(searchText.toLowerCase())) : persons
+
+  const deleteNumberOf = (id) => {
+    console.log(id,'deleted')
+  }
   
   return (
     <div>
@@ -60,7 +66,7 @@ const App = () => {
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handleNewNames={handleNewNames} handleNewNumbers={handleNewNumbers}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} searchText={searchText}/>
+      {personChange.map(person => <Persons key={person.id} person={person} deleteNumber={()=>deleteNumberOf(person.id)}/>)}
     </div>
   )
 }
