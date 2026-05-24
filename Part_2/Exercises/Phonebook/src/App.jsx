@@ -79,7 +79,7 @@ const App = () => {
                 setErrorMessage(null)
               },5000)
             })
-            .catch(error => {
+            .catch(() => {
               setErrorColor('redError')
               setErrorMessage(`Information of ${existingNumber.name} has already been removed from server`)
               setTimeout(()=>{
