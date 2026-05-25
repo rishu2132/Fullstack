@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import BasicData from "./components/BasicData"
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -40,8 +41,8 @@ const App = () => {
         />
       </p>
 
-      {newCountry.map(country => (
-        <p key={country}>{country}</p>
+      { newCountry.length > 10 ? <p>Too many matches, specify another filter</p> : newCountry.length === 1 ? <BasicData name={newCountry[0]}/> : newCountry.map(country => (
+        <p key={country}>{country}</p> 
       ))}
     </div>
   )
