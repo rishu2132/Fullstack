@@ -6,6 +6,7 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [newName, setNewName] = useState("")
   const [newCountry, setNewCountry] = useState([])
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     axios
@@ -28,7 +29,10 @@ const App = () => {
     )
 
     setNewCountry(filteredCountries)
+    setSelectedCountry(null)
   }
+
+  
 
   return (
     <div>
@@ -42,8 +46,12 @@ const App = () => {
       </p>
 
       { newCountry.length > 10 ? <p>Too many matches, specify another filter</p> : newCountry.length === 1 ? <BasicData name={newCountry[0]}/> : newCountry.map(country => (
-        <p key={country}>{country}</p> 
+        
+          <p key={country}>{country} <button onClick={()=>{setSelectedCountry(country)}}>Show</button></p> 
+            
+        
       ))}
+      {selectedCountry && <BasicData name={selectedCountry}/>}
     </div>
   )
 }
