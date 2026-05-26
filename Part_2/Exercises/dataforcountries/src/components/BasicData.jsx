@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 
 const api_key = import.meta.env.VITE_SOME_KEY
 
+
+
 const BasicData = ({name}) => {
     const [countryData , setCountryData] = useState({})
     const [weatherData, setWeatherData] = useState({})
@@ -28,13 +30,13 @@ const BasicData = ({name}) => {
                 const wdata = response.data
                 setWeatherData(wdata)
             })
-        },[countryData])
+    },[countryData])
    
     
         return (
             <div>
                 <h1>{name}</h1>
-                <p>Capital: {countryData.capital}</p>
+                <p>Capital: {countryData.capital?.[0]}</p>
                 <p>Area: {countryData.area}</p>
                 <h1>Languages</h1>
                 <ul>
@@ -42,9 +44,12 @@ const BasicData = ({name}) => {
                 </ul>
                 <img src={countryData.flags?.png} />
                 <div>
-                    <h1>Weather in {countryData.capital}</h1>
-                    <p>Temperature: {(weatherData.main?.temp - 273.15).toFixed(2)} Celcius</p>
-                    <p>Wind {weatherData.wind?.speed} m/s</p>
+                    <h1>Weather in {countryData.capital?.[0]}</h1>
+                    <p>Temperature: {weatherData.main ? (weatherData.main.temp - 273.15).toFixed(1) : '...'} Celcius</p>
+                <img  src={weatherData.weather?.[0] ? `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png` : null}
+                        alt={weatherData.weather?.[0]?.description} 
+                /> 
+                <p>Wind {weatherData.wind?.speed} m/s</p>
                 </div>
             </div>
         )
