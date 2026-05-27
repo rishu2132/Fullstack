@@ -26,4 +26,11 @@
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
+
+    browser->>server: POST https://fullstack-exampleapp.herokuapp.com/new_note
+    activate server
+    server-->>browser: responds with status code 302 i.e URL redirect , asks browser to perform new HTTP GET request to the address defined in the header's location - the address notes
+    deactivate server
+
+    Note right of browser: So, the browser reloads the Notes page. The reload causes three more HTTP requests: fetching main.css ,  main.js and data.json
 ```
