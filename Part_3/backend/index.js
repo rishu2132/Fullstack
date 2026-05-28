@@ -1,6 +1,9 @@
 const express = require('express')
+const cors = require('cors')
+
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 let notes = [
@@ -44,11 +47,6 @@ app.get('/api/notes/:id', (request, response ) => {
         response.status(404).end()}
 })
 
-app.post('/api/notes', (request,response ) => {
-    const note = request.body
-    console.log(note)
-    response.json(note)
-})
 
 app.delete('/api/notes/:id', (request,response ) => {
     const id = request.params.id
