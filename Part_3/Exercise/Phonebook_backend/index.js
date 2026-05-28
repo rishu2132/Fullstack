@@ -3,6 +3,12 @@ const morgan = require('morgan')
 
 const app = express()
 
+app.use(morgan('tiny'))
+
+app.get('/',(req,res) => {
+    res.send('hello world')
+})
+
 app.use(express.json())
 
 let persons = [
@@ -27,6 +33,8 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+
+
 
 app.get('/api/persons',(request, response ) => {
     response.json(persons)
