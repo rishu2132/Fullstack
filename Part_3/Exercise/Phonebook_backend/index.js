@@ -3,7 +3,29 @@ const morgan = require('morgan')
 
 const app = express()
 
-app.use(morgan('tiny'))
+morgan.token('content',(req,res)=> {
+
+    if (req.body){
+         const content = {
+            name:req.body.name,
+            number:req.body.number
+        }
+    
+         return JSON.stringify(content)
+    }
+   
+})
+
+app.use(morgan((tokens, req, res)=> {
+    return [
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms',
+        tokens.content(req,res)
+    ].join(' ')
+}))
 
 app.get('/',(req,res) => {
     res.send('hello world')
