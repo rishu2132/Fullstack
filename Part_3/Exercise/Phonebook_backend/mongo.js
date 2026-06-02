@@ -34,5 +34,16 @@ if (process.argv.length > 3){
 
 }
 
+if (process.argv.length === 3){
+
+    PhoneNumber.find({}).then(result => {
+        console.log('phonebook:')
+        result.forEach(person => {
+            console.log(person.name, person.number)
+        })
+        mongoose.connection.close()
+    })
+}
+
 
 
