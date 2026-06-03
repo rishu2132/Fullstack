@@ -96,37 +96,41 @@ app.delete('/api/persons/:id',( request,response) => {
 // # post
 
 app.post('/api/persons',(request, response) => {
-    const id = Math.floor(Math.random()*10000)
     const body = request.body
 
-    const person = {
-        id:id,
-        name:body.name,
-        number:body.number
-    }
-
-    const nameExists = persons.some(p => p.name === body.name)
-
-    if (nameExists){
-        return response.status(400).json({
-            error: 'name already exists'
+    if (!body.content) {
+        return response.status(400).json({ 
+        error: 'content missing' 
         })
     }
+
+    const person = new PhoneNumber({
+        name:body.name,
+        number:body.number,
+    })
+
+    person.save().then(result => {
+        response.json(result)
+    })
+
+    // const nameExists = persons.some(p => p.name === body.name)
+
+    // if (nameExists){
+    //     return response.status(400).json({
+    //         error: 'name already exists'
+    //     })
+    // }
+    //  if (!body.name){
+    //     return response.status(404).json({
+    //         error: 'name is missing'
+    //     })
+    // }else if (!body.number){
+    //     return response.status(404).json({
+    //         error: 'number is missing'
+    //     })
+    // }
 
     
-
-    if (!body.name){
-        return response.status(404).json({
-            error: 'name is missing'
-        })
-    }else if (!body.number){
-        return response.status(404).json({
-            error: 'number is missing'
-        })
-    }
-
-    persons = persons.concat(person)
-    response.json(persons)
     
 })
 
