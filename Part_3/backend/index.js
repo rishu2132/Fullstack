@@ -1,11 +1,32 @@
 const express = require('express')
-const cors = require('cors')
+const mongoose = require('mongoose')
 
 const app = express()
 
-app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
+
+const password = process.argv[2]
+
+const url = `mongodb+srv://Utkfullstack:${password}@cluster0.hfieplm.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url, {family:4})
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+})
+
+noteSchema.set('toJSON',{
+  transform:(document,returnedObject)=>{
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Note = mongoose.model('Note',noteSchema)
 
 let notes = [
   {
@@ -31,8 +52,11 @@ app.get('/',(request , response ) => {
     response.send('<h1>Hello World</h1>')
 })
 
-app.get('/api/notes',(request, respnse ) => {
-    respnse.json(notes)
+app.get('/api/notes',(request, response ) => {
+    Note.find({}).then(notes => {
+      response.json(notes)
+    })
+    
 
 })
 
