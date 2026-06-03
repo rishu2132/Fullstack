@@ -98,7 +98,7 @@ app.delete('/api/persons/:id',( request,response) => {
 app.post('/api/persons',(request, response) => {
     const body = request.body
 
-    if (!body.content) {
+    if (!body.name) {
         return response.status(400).json({ 
         error: 'content missing' 
         })
@@ -109,8 +109,8 @@ app.post('/api/persons',(request, response) => {
         number:body.number,
     })
 
-    person.save().then(result => {
-        response.json(result)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
     })
 
     // const nameExists = persons.some(p => p.name === body.name)
