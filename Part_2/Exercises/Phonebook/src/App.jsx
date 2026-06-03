@@ -46,7 +46,7 @@ const App = () => {
       }
       personService
         .create(personObject)
-        .then(returnedPerson => setPersons(returnedPerson))
+        .then(returnedPerson => setPersons(prevPersons => prevPersons.concat(returnedPerson)))
         .then(()=>{
           setErrorMessage(`Added ${personObject.name}`)
           setTimeout(()=>{
