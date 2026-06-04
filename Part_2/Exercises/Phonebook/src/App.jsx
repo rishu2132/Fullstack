@@ -109,11 +109,19 @@ const App = () => {
   const filteredPerson = searchText ? persons.filter(person => person.name.toLowerCase().includes(searchText.toLowerCase())) : persons
 
   const deleteNumberOf = (id) => {
-    console.log(id,'deleted')
     if (window.confirm('Do you want to delete the number')){
+      const deletedPerson = persons.filter(p => p.id === id)
+      console.log(deletedPerson)
       personService
       .remove(id)
       .then(() => setPersons(persons.filter(p => p.id !== id)))
+      .then(()=>{
+        setErrorColor('redError')
+        setErrorMessage(`${deletedPerson[0].name} number: ${deletedPerson[0].number} phone number has been deleted`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        },5000)
+      })
     }
     
   }
