@@ -5,39 +5,39 @@ console.log('connecting to ', url)
 
 
 mongoose.set('strictQuery',false)
-mongoose.connect(url,{family:4})
-    .then(result => {
-        console.log('Connected to MongoDB')
-    })
-    .catch(error =>{
-        console.log('error connecting to MongoDB',error.message)
-    })
+mongoose.connect(url,{ family:4 })
+  .then(() => {
+    console.log('Connected to MongoDB')
+  })
+  .catch(error => {
+    console.log('error connecting to MongoDB',error.message)
+  })
 
 const numberSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        minLength: 3,
-        required: true
+  name:{
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number:{
+    type: String,
+    minLength: 8,
+    validate: {
+      validator: function(v){
+        return /\d{2}-\d{6}/.test(v) || /\d{3}-\d{5}/.test(v)
+      },
+      message: props => `${props.value} is not a valid number !`
     },
-    number:{
-        type: String,
-        minLength: 8,
-        validate: {
-            validator: function(v){
-                return /\d{2}-\d{6}/.test(v) || /\d{3}-\d{5}/.test(v)
-            },
-            message: props => `${props.value} is not a valid number !`
-        },
-        required: [true,'User phone number required']
-    },
+    required: [true,'User phone number required']
+  },
 })
 
 numberSchema.set('toJSON',{
-    transform:(document,returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
+  transform:(document,returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
 })
 
 module.exports = mongoose.model('PhoneNumber',numberSchema)
