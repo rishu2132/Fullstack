@@ -5,7 +5,7 @@ const PersonForm = (props) => {
         <div>
           name: <input type="text" value={props.newName} onChange={props.handleNewNames}/>
         </div>
-        <div>number: <input type="number" value={props.newNumber}  onChange={props.handleNewNumbers}/></div>
+        <div>number: <input value={props.newNumber}  onChange={props.handleNewNumbers}/></div>
         <div>
           <button type="submit">add</button>
         </div>

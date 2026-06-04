@@ -48,7 +48,15 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => setPersons(prevPersons => prevPersons.concat(returnedPerson)))
         .then(()=>{
+          setErrorColor('greenError')
           setErrorMessage(`Added ${personObject.name}`)
+          setTimeout(()=>{
+            setErrorMessage(null)
+          },5000)
+        })
+        .catch(error => {
+          setErrorColor('redError')
+          setErrorMessage(error.response.data.error)
           setTimeout(()=>{
             setErrorMessage(null)
           },5000)
