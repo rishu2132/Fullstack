@@ -86,11 +86,13 @@ app.get('/api/persons/:id', (request,response) => {
     }
 })
 
-app.delete('/api/persons/:id',( request,response) => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
-
-    response.status(204).end()
+app.delete('/api/persons/:id',( request,response , next) => {
+    PhoneNumber.findByIdAndDelete(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
+    
 })
 
 // # post
@@ -134,7 +136,19 @@ app.post('/api/persons',(request, response) => {
     
 })
 
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if(error.name === 'CastError'){
+        return response.status(400).send({error: "misformatted id"})
+    }
+
+    next(error)
+}
+
 const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)
 })
+
+app.use(errorHandler)
