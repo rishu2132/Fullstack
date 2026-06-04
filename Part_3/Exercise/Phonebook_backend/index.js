@@ -38,30 +38,6 @@ app.get('/',(req,res) => {
 
 app.use(express.json())
 
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
-
 
 app.get('/api/persons',(request, response ,next ) => {
     PhoneNumber.find({})
@@ -72,20 +48,26 @@ app.get('/api/persons',(request, response ,next ) => {
 })
 
 app.get('/info', (request,response) => {
-    const personCount = persons.length 
+    let personCount = 0
     const date = new Date().toString()
-    response.send(`<p>Phonebook has info for ${personCount} people. </p><p>${date}</p>`)
+    PhoneNumber.find({})
+        .then(persons => {
+            persons.forEach(person => {
+                personCount = personCount + 1
+            })
+            response.send(`<p>Phonebook has info for ${personCount} people. </p><p>${date}</p>`)
+        })
+        .catch(error => next(error))
+    
+    
 })
 
-app.get('/api/persons/:id', (request,response) => {
-    const id = request.params.id
-    const person = persons.find(person => person.id === id)
-    if(person){
-        response.json(person)
-    }else{
-        response.statusMessage="content not found"
-        response.status(404).end()
-    }
+app.get('/api/persons/:id', (request,response,next) => {
+    PhoneNumber.findById(request.params.id)
+        .then(person => {
+            response.json(person)
+        })
+        .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id',( request,response , next) => {
