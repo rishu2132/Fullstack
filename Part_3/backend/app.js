@@ -6,7 +6,6 @@ const middleware = require('./utils/middleware')
 const notesRouter = require('./controllers/notes')
 
 const app = express()
-logger.info('app.js loaded')
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose
