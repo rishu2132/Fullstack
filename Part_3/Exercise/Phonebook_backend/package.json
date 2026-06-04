@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "build:ui": "rm -rf dist && cd ../../../Part_2/Exercises/Phonebook && npm run build && cp -r dist ../../../Part_3/Exercise/Phonebook_backend "
   },
   "dependencies": {
     "dotenv": "^17.4.2",
