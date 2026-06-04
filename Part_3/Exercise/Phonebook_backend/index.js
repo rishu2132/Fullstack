@@ -63,10 +63,12 @@ let persons = [
 
 
 
-app.get('/api/persons',(request, response ) => {
-    PhoneNumber.find({}).then(result => {
-        response.json(result)
-    })
+app.get('/api/persons',(request, response ,next ) => {
+    PhoneNumber.find({})
+        .then(result => {
+            response.json(result)
+        })
+        .catch(error => next(error))
 })
 
 app.get('/info', (request,response) => {
@@ -97,7 +99,7 @@ app.delete('/api/persons/:id',( request,response , next) => {
 
 // # post
 
-app.post('/api/persons',(request, response) => {
+app.post('/api/persons',(request, response ,next)  => {
     const body = request.body
 
     if (!body.name) {
@@ -111,9 +113,11 @@ app.post('/api/persons',(request, response) => {
         number:body.number,
     })
 
-    person.save().then(savedPerson => {
-        response.json(savedPerson)
-    })
+    person.save()
+        .then(savedPerson => {
+         response.json(savedPerson)
+        })
+        .catch(error => next(error))
 
     // const nameExists = persons.some(p => p.name === body.name)
 
@@ -131,10 +135,13 @@ app.post('/api/persons',(request, response) => {
     //         error: 'number is missing'
     //     })
     // }
-
-    
-    
 })
+
+const unknownEndpoint = (request,response) => {
+    response.status(404).send({error : 'unknown endpoint'})
+}
+
+app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
