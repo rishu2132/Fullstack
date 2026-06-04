@@ -97,12 +97,31 @@ app.delete('/api/persons/:id',( request,response , next) => {
     
 })
 
+// ? put
+
+app.put('/api/persons/:id',(request,response,next) => {
+    const {name , number} = request.body
+
+    PhoneNumber.findById(request.params.id)
+        .then(person => {
+            if(!person){
+               return response.status(404).end()
+            }
+
+            person.name = name
+            person.number = number
+
+            return person.save().then(updatedPerson => {response.json(updatedPerson)})
+        })
+        .catch(error => next(error))
+})
+
 // # post
 
 app.post('/api/persons',(request, response ,next)  => {
     const body = request.body
 
-    if (!body.name) {
+    if (!body.name || !body.number) {
         return response.status(400).json({ 
         error: 'content missing' 
         })
@@ -124,15 +143,6 @@ app.post('/api/persons',(request, response ,next)  => {
     // if (nameExists){
     //     return response.status(400).json({
     //         error: 'name already exists'
-    //     })
-    // }
-    //  if (!body.name){
-    //     return response.status(404).json({
-    //         error: 'name is missing'
-    //     })
-    // }else if (!body.number){
-    //     return response.status(404).json({
-    //         error: 'number is missing'
     //     })
     // }
 })
