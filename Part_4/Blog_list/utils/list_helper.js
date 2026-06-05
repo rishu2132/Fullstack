@@ -21,8 +21,29 @@ const favoriteBlog = (blogs) => {
     return mostLikedBlog
 }
 
+const mostBlog = (blogs) => {
+
+    const newBlogList = blogs.map(blog => {
+        let count = 0
+        for(let i=0;i<blogs.length;i++){
+            if(blog.author === blogs[i].author){
+                count++
+            }
+        }
+        return { author: blog.author, blogs: count}
+    })
+
+    const uniqueBlogList = [...new Map(newBlogList.map(blog =>[blog.author,blog])).values()]
+
+    const topAuthor = uniqueBlogList.reduce((max,{ author, blogs}) => blogs > max.blogs ? {author,blogs} : max,{ author: null, blogs: 0})
+    
+
+    return topAuthor
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlog
 }

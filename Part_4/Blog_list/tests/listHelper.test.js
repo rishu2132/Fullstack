@@ -148,3 +148,34 @@ describe('favorite Blog', () => {
 
 
 })
+
+describe('most blogs', () => {
+    const bigList = [
+        {
+            "title": "the pyshocology of ",
+            "author": "me",
+            "url": "http://...",
+            "likes": 45,
+            "id": "6a21a0f7831440817769be52"
+        },
+        {
+            "title": "atomic habits",
+            "author": "james clear",
+            "url": "http://atomichabits.jamesclear",
+            "likes": 1019,
+            "id": "6a22281d0b876f626d4012a1"
+        },
+        {
+            "title": "atomic habits",
+            "author": "james clear",
+            "url": "http://atomichabits.jamesclear",
+            "likes": 1019,
+            "id": "6a223c14efdef79ca0ae8f11"
+        }
+    ]
+
+    test('author with most blogs',() => {
+        const result = listHelper.mostBlog(bigList)
+        assert.deepStrictEqual(result, { author: "james clear", blogs: 2 })
+    })
+})
