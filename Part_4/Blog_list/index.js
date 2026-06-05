@@ -2,6 +2,7 @@ const config = require('./utils/config')
 const express = require('express')
 const mongoose = require('mongoose')
 const Blog = require('./models/blog')
+const logger = require('./utils/logger')
 
 const app = express()
 console.log('connecting to database')
@@ -9,9 +10,9 @@ console.log('connecting to database')
 
 mongoose.connect(config.MongoURL,{family:4})
     .then(() => {
-        console.log('connected to MongoDB')
+        logger.info('connected to MongoDB')
     })
-    .catch(error => console.log(error.message))
+    .catch(error => logger.error(error.message))
 
 
 app.use(express.static('dist'))
@@ -34,5 +35,5 @@ app.post('/api/blogs', (request,response) => {
 
 
 app.listen(config.PORT , () => {
-    console.log(`Server is running on PORT ${config.PORT}`)
+    logger.info(`Server is running on PORT ${config.PORT}`)
 })
