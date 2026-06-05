@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const dummy = (blogs) => {
     return 1
 }
@@ -23,19 +25,10 @@ const favoriteBlog = (blogs) => {
 
 const mostBlog = (blogs) => {
 
-    const newBlogList = blogs.map(blog => {
-        let count = 0
-        for(let i=0;i<blogs.length;i++){
-            if(blog.author === blogs[i].author){
-                count++
-            }
-        }
-        return { author: blog.author, blogs: count}
-    })
+   const authorCounts = _.countBy(blogs,'author')
 
-    const uniqueBlogList = [...new Map(newBlogList.map(blog =>[blog.author,blog])).values()]
-
-    const topAuthor = uniqueBlogList.reduce((max,{ author, blogs}) => blogs > max.blogs ? {author,blogs} : max,{ author: null, blogs: 0})
+    const topAuthor = Object.entries(authorCounts)
+            .reduce((max,[author, blogs]) => blogs > max.blogs ? {author,blogs} : max,{ author: null, blogs: 0})
     
 
     return topAuthor
