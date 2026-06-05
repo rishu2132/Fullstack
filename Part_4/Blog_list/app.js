@@ -9,7 +9,7 @@ const app = express()
 logger.info('connecting to database')
 
 
-mongoose.connect(config.MongoURL,{family:4})
+mongoose.connect(config.MONGODB_URI,{family:4})
     .then(() => {
         logger.info('connected to MongoDB')
     })
