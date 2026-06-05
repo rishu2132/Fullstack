@@ -35,11 +35,12 @@ const mostBlog = (blogs) => {
 }
 
 const mostLikes = (blogs) => {
-    
-    const mostLikes = Math.max(...blogs.map(blog => blog.likes))
-    const mostLikedBlog = blogs.find(blog => blog.likes === mostLikes)
 
-    return {author: mostLikedBlog.author , likes: mostLikedBlog.likes}
+    const author = blogs.map(blog => [blog.author,blog.likes])
+    
+    const likedAuthor = _.maxBy(author,([author, likes]) => likes)
+
+    return {author: likedAuthor[0] , likes: likedAuthor[1]}
 }
 module.exports = {
     dummy,
