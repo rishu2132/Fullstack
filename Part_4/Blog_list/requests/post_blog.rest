@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title" : "atomic habits",
+    "author" : "james clear",
+    "url" : "http://atomichabits.jamesclear",
+    "likes" : 1019
+}
