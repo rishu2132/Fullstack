@@ -1,30 +1,13 @@
-require('dotenv').config()
+const config = require('./utils/config')
 const express = require('express')
 const mongoose = require('mongoose')
+const Blog = require('./models/blog')
 
 const app = express()
 console.log('connecting to database')
 
-const MongoURL = process.env.MongoURL
 
-const blogSchema = new mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number,
-})
-
-blogSchema.set('toJSON',{
-    transform:(document,returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
-
-const Blog = mongoose.model('Blog',blogSchema)
-
-mongoose.connect(MongoURL,{family:4})
+mongoose.connect(config.MongoURL,{family:4})
     .then(() => {
         console.log('connected to MongoDB')
     })
@@ -50,9 +33,6 @@ app.post('/api/blogs', (request,response) => {
 
 
 
-
-const PORT = process.env.PORT
-
-app.listen(PORT , () => {
-    console.log(`Server is running on PORT ${PORT}`)
+app.listen(config.PORT , () => {
+    console.log(`Server is running on PORT ${config.PORT}`)
 })
