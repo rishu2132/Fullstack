@@ -72,6 +72,29 @@ test('create a new blog post' , async () => {
     assert(contents.includes('a land of fools'))
 
 })
+
+test('like property is missing from the blog', async () => {
+     const newBlog = {
+        title: 'a land of fools',
+        author: 'welsing',
+        url: 'no lnk',
+    }
+
+    if(newBlog.likes === undefined){
+        newBlog.likes = 0
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type',/application\/json/)
+
+    const blogAtEnd = await api.get('/api/blogs')
+    const zeroLikeBlog = blogAtEnd.body.find(b => b.title ==='a land of fools')
+    assert.strictEqual(zeroLikeBlog.likes, 0)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
