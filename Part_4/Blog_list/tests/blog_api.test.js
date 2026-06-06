@@ -51,6 +51,27 @@ test('unique identitifier property of blog posts is Id', async () => {
     //assert.strictEqual(response.body[0]._id, undefined)
     
 })
+
+test('create a new blog post' , async () => {
+    const newBlog = {
+        title: 'a land of fools',
+        author: 'welsing',
+        url: 'no lnk',
+        likes: 68
+    }
+
+    await api.post('/api/blogs')
+             .send(newBlog)
+             .expect(201)
+             .expect('Content-Type', /application\/json/)
+
+    const blogAtEnd = await api.get('/api/blogs')
+    assert.strictEqual(blogAtEnd.body.length, initialBlogs.length + 1)
+
+    const contents = blogAtEnd.body.map(b => b.title)
+    assert(contents.includes('a land of fools'))
+
+})
 after(async () => {
     await mongoose.connection.close()
 })
