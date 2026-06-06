@@ -128,6 +128,20 @@ test('a blog can be deleted', async () => {
     assert(!ids.includes(blogToDelete.id))
 })
 
+test.only('update only number of likes', async () => {
+    const blogAtStart = await api.get('/api/blogs')
+    const blogToUpdate = blogAtStart.body[0]
+    const likesAtStart = blogToUpdate.likes
+  
+    blogToUpdate.likes = blogToUpdate.likes + 1
+
+    const updatedBlog = await api.put(`/api/blogs/${blogToUpdate.id}`)
+                                .send(blogToUpdate)
+                                .expect(200)
+                                .expect('Content-Type', /application\/json/)
+    assert.strictEqual(updatedBlog.body.likes, likesAtStart + 1)
+    assert.strictEqual(updatedBlog.body.id, blogToUpdate.id)        
+})
 
 after(async () => {
     await mongoose.connection.close()
