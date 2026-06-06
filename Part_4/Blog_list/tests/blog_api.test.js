@@ -89,6 +89,31 @@ test('like property is missing from the blog', async () => {
     assert.strictEqual(response.body.likes, 0)
 })
 
+test('title is missing', async () => {
+    const newBlog = {
+        author: 'welsing',
+        url: 'no lnk',
+        likes: 9
+    }
+
+    await api.post('/api/blogs')
+             .send(newBlog)
+             .expect(400)
+
+})
+
+test('url is missing',async () => {
+    const newBlog = {
+        title: 'a land of fools',
+        author: 'welsing',
+        likes: 7,
+    }
+
+    await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+})
+
 
 after(async () => {
     await mongoose.connection.close()
