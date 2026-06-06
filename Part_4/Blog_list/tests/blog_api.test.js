@@ -114,6 +114,20 @@ test('url is missing',async () => {
             .expect(400)
 })
 
+test('a blog can be deleted', async () => {
+    const blogAtStart = await api.get('/api/blogs')
+    const blogToDelete = blogAtStart.body[0]
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(200)
+    
+    const blogAtEnd = await api.get('/api/blogs')
+    assert.strictEqual(blogAtEnd.body.length , blogAtStart.body.length - 1)
+
+    const ids = blogAtEnd.body.map(b => b.id)
+    assert(!ids.includes(blogToDelete.id))
+})
+
 
 after(async () => {
     await mongoose.connection.close()
