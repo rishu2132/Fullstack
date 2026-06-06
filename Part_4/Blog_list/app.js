@@ -13,7 +13,7 @@ mongoose.connect(config.MONGODB_URI,{family:4})
     .then(() => {
         logger.info('connected to MongoDB')
     })
-    .catch(error => logger.error(error.message))
+    .catch(error => logger.error('error connecting to database',error.message))
 
 
 app.use(express.static('dist'))

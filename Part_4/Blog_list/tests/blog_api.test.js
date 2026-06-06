@@ -44,6 +44,13 @@ test('no of blogs returned' , async () => {
     assert.strictEqual(response.body.length , initialBlogs.length)
 })
 
+test('unique identitifier property of blog posts is Id', async () => {
+
+    const response = await api.get('/api/blogs')
+    assert(response.body[0].id)
+    //assert.strictEqual(response.body[0]._id, undefined)
+    
+})
 after(async () => {
     await mongoose.connection.close()
 })
