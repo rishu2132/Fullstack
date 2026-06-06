@@ -80,9 +80,7 @@ test('like property is missing from the blog', async () => {
         url: 'no lnk',
     }
 
-    if(newBlog.likes === undefined){
-        newBlog.likes = 0
-    }
+    newBlog.likes === undefined? newBlog.likes = 0 : null
 
     await api
         .post('/api/blogs')
@@ -94,6 +92,8 @@ test('like property is missing from the blog', async () => {
     const zeroLikeBlog = blogAtEnd.body.find(b => b.title ==='a land of fools')
     assert.strictEqual(zeroLikeBlog.likes, 0)
 })
+
+
 
 after(async () => {
     await mongoose.connection.close()
