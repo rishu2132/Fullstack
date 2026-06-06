@@ -80,19 +80,14 @@ test('like property is missing from the blog', async () => {
         url: 'no lnk',
     }
 
-    newBlog.likes === undefined? newBlog.likes = 0 : null
+    const response = await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(201)
+                .expect('Content-Type',/application\/json/)
 
-    await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(201)
-        .expect('Content-Type',/application\/json/)
-
-    const blogAtEnd = await api.get('/api/blogs')
-    const zeroLikeBlog = blogAtEnd.body.find(b => b.title ==='a land of fools')
-    assert.strictEqual(zeroLikeBlog.likes, 0)
+    assert.strictEqual(response.body.likes, 0)
 })
-
 
 
 after(async () => {
