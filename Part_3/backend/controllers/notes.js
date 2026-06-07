@@ -32,7 +32,8 @@ const getTokenFrom = (request) => {
 
 notesRouter.post('/', async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+   // token expires in 60*60 seconds, that is, in one hour
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET,{expiresIn: 60*60})
   if(!decodedToken.id){
     return response.status(401).json({error: 'error invalid'})
   }
