@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Note = require('../models/note')
+const User = require('../models/user')
 
 const api = supertest(app)
 
@@ -63,11 +64,14 @@ describe('when there is initially some notes saved' , () => {
   })
 
   describe('addition of a new note', () => {
-    test('succeeds with valid data', async () => {
+    test.only('succeeds with valid data', async () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
         important: true,
+        userId: "6a250cf31de920802a37ddee"
       }
+      const noteAtStart = await helper.notesInDb()
+      console.log(noteAtStart)
 
       await api
         .post('/api/notes')
@@ -76,7 +80,7 @@ describe('when there is initially some notes saved' , () => {
         .expect('Content-Type', /application\/json/)
 
       const notesAtEnd = await helper.notesInDb()
-      assert.strictEqual(notesAtEnd.length, helper.initialNotes.length + 1)
+      assert.strictEqual(notesAtEnd.length, noteAtStart.length + 1)
 
       const contents = notesAtEnd.map(n => n.content)
       assert(contents.includes('async/await simplifies making async calls'))
