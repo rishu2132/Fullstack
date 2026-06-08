@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImF1dHR1IiwiaWQiOiI2YTI2M2ZmMTVlNGQ3MDk0MWZjNTA1Y2MiLCJpYXQiOjE3ODA4OTI5NjJ9.LqR5CxoRj4fO4Uzm-DTH_VPcm8ExJnxxv4rEFJ7BdZ4
 
 {
-    "title" : "atomic habits",
-    "author" : "james clear",
-    "url" : "http://atomichabits.jamesclear",
-    "likes" : 1019
+    "title" : "never again",
+    "author" : "man who drowned",
+    "url" : "http://drown.com",
+    "likes" : 69
 }
