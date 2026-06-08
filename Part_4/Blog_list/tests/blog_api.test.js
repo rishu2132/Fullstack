@@ -4,6 +4,10 @@ const mongoose = require('mongoose')
 const app = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
+
+
 
 
 const api = supertest(app)
@@ -23,9 +27,18 @@ const initialBlogs = [
     }
 ]
 
-beforeEach(async () =>{
-  await  Blog.deleteMany({})
-  await  Blog.insertMany(initialBlogs)
+beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(initialBlogs)
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('secret', 10)
+    const user = new User({
+        username: 'root',
+        name: 'Superuser',
+        passwordHash,
+    })
+    await user.save()
 })
 
 test('blogs are returned as json', async () => {
@@ -52,69 +65,122 @@ test('unique identitifier property of blog posts is Id', async () => {
     
 })
 
-test('create a new blog post' , async () => {
+describe('creating a blog', () => {
+    test('a valid blog can be added with a valid token', async () => {
+    const loginResponse = await api
+        .post('/api/login')
+        .send({
+            username: 'root',
+            password: 'secret',
+        })
+
+    const token = loginResponse.body.token
+    const blogsAtStart = await Blog.find({})
     const newBlog = {
-        title: 'a land of fools',
-        author: 'welsing',
-        url: 'no lnk',
-        likes: 68
+        title: 'Testing JWT',
+        author: 'Utkarsh',
+        url: 'https://example.com',
+        likes: 10,
     }
 
-    await api.post('/api/blogs')
-             .send(newBlog)
-             .expect(201)
-             .expect('Content-Type', /application\/json/)
+    await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
 
-    const blogAtEnd = await api.get('/api/blogs')
-    assert.strictEqual(blogAtEnd.body.length, initialBlogs.length + 1)
-
-    const contents = blogAtEnd.body.map(b => b.title)
-    assert(contents.includes('a land of fools'))
+    const blogsAtEnd = await Blog.find({})
+    assert.strictEqual(blogsAtEnd.length,blogsAtStart.length + 1)
 
 })
+    
+    test('adding a blog fails with status code 401 if token is not provided', async () => {
+        const newBlog = {
+            title: 'Unauthorized Blog',
+            author: 'Utkarsh',
+            url: 'https://example.com',
+            likes: 0
+        }
 
-test('like property is missing from the blog', async () => {
-     const newBlog = {
-        title: 'a land of fools',
-        author: 'welsing',
-        url: 'no lnk',
-    }
-
-    const response = await api
-                .post('/api/blogs')
-                .send(newBlog)
-                .expect(201)
-                .expect('Content-Type',/application\/json/)
-
-    assert.strictEqual(response.body.likes, 0)
-})
-
-test('title is missing', async () => {
-    const newBlog = {
-        author: 'welsing',
-        url: 'no lnk',
-        likes: 9
-    }
-
-    await api.post('/api/blogs')
-             .send(newBlog)
-             .expect(400)
-
-})
-
-test('url is missing',async () => {
-    const newBlog = {
-        title: 'a land of fools',
-        author: 'welsing',
-        likes: 7,
-    }
-
-    await api.post('/api/blogs')
+        await api
+            .post('/api/blogs')
             .send(newBlog)
-            .expect(400)
+            .expect(401)
+    })
+
+    test('like property is missing from the blog', async () => {
+        const loginResponse = await api
+            .post('/api/login')
+            .send({
+                username: 'root',
+                password: 'secret',
+        })
+
+        const token = loginResponse.body.token
+        const newBlog = {
+            title: 'a land of fools',
+            author: 'welsing',
+            url: 'no lnk',
+        }
+
+        const response = await api
+                    .post('/api/blogs')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send(newBlog)
+                    .expect(201)
+                    .expect('Content-Type',/application\/json/)
+
+        assert.strictEqual(response.body.likes, 0)
+    })
+
+    test('title is missing', async () => {
+        const loginResponse = await api
+            .post('/api/login')
+            .send({
+                username: 'root',
+                password: 'secret',
+        })
+
+        const token = loginResponse.body.token
+        const newBlog = {
+            author: 'welsing',
+            url: 'no lnk',
+            likes: 9
+        }
+
+        await api.post('/api/blogs')
+                .set('Authorization', `Bearer ${token}`)
+                .send(newBlog)
+                .expect(400)
+
+    })
+
+    test('url is missing',async () => {
+        const loginResponse = await api
+            .post('/api/login')
+            .send({
+                username: 'root',
+                password: 'secret',
+        })
+
+        const token = loginResponse.body.token
+        const newBlog = {
+            title: 'a land of fools',
+            author: 'welsing',
+            likes: 7,
+        }
+
+        await api.post('/api/blogs')
+                .set('Authorization', `Bearer ${token}`)
+                .send(newBlog)
+                .expect(400)
+    })
+
 })
 
 test('a blog can be deleted', async () => {
+
     const blogAtStart = await api.get('/api/blogs')
     const blogToDelete = blogAtStart.body[0]
 
