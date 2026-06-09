@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, updateLike, removeBlog }) => {
+const Blog = ({ blog, updateLike, removeBlog, user }) => {
   const [blogView, setBlogView] = useState(false)
     const blogStyle = {
       paddingTop: 10,
@@ -16,8 +16,6 @@ const Blog = ({ blog, updateLike, removeBlog }) => {
     }
 
     const handleRemove = (blog) => {
-      const userJSON = window.localStorage.getItem('LoggedBlogUser')
-      const user = JSON.parse(userJSON)
       if (blog.user?.username === user.username){
         if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}`)){
           removeBlog(blog.id)

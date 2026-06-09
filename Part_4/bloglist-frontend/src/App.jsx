@@ -138,7 +138,7 @@ const App = () => {
       </div>
       
       {blogs.map(blog => 
-        <Blog key={blog.id} blog={blog} updateLike={updateLikes} removeBlog={removeBlog} />
+        <Blog key={blog.id} blog={blog} updateLike={updateLikes} removeBlog={removeBlog} user={user} />
       )}
     </div>
   )
