@@ -75,6 +75,14 @@ const App = () => {
     },5000);
   }
 
+
+  const updateLikes = async (blogObject) => {
+
+    await blogService.updateLike(blogObject)
+    const updatedblogs = await blogService.getAll()
+    setBlogs(updatedblogs)
+  }
+
   const hideWhenVisible = {display: blogFormVisible ? "none" : ''}
   const showWhenVisible = {display: blogFormVisible ? "" : "none"}
   
@@ -123,7 +131,7 @@ const App = () => {
       </div>
       
       {blogs.map(blog => 
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateLike={updateLikes} />
       )}
     </div>
   )
