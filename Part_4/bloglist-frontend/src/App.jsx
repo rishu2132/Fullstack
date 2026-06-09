@@ -84,6 +84,12 @@ const App = () => {
     setBlogs(sortedBlogs)
   }
 
+  const removeBlog = async (id) => {
+    await blogService.remove(id)
+    const updatedBlog = await blogService.getAll()
+    setBlogs(updatedBlog)
+  }
+
   const hideWhenVisible = {display: blogFormVisible ? "none" : ''}
   const showWhenVisible = {display: blogFormVisible ? "" : "none"}
   
@@ -132,7 +138,7 @@ const App = () => {
       </div>
       
       {blogs.map(blog => 
-        <Blog key={blog.id} blog={blog} updateLike={updateLikes} />
+        <Blog key={blog.id} blog={blog} updateLike={updateLikes} removeBlog={removeBlog} />
       )}
     </div>
   )

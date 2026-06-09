@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, updateLike }) => {
+const Blog = ({ blog, updateLike, removeBlog }) => {
   const [blogView, setBlogView] = useState(false)
     const blogStyle = {
       paddingTop: 10,
@@ -11,9 +11,20 @@ const Blog = ({ blog, updateLike }) => {
     }
 
     const increaseLike = (blog) => {
-      event.preventDefault()
       const updatedBlog = ({...blog, likes:blog.likes + 1 })
       updateLike(updatedBlog)
+    }
+
+    const handleRemove = (blog) => {
+      const userJSON = window.localStorage.getItem('LoggedBlogUser')
+      const user = JSON.parse(userJSON)
+      if (blog.user?.username === user.username){
+        if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}`)){
+          removeBlog(blog.id)
+        }
+      } else {
+        console.log('not the user who created')
+      }
     }
 
     const blogDetail = () => (
@@ -21,6 +32,7 @@ const Blog = ({ blog, updateLike }) => {
         <p>{blog.url}</p>
         <p>likes {blog.likes} <button onClick={() => {increaseLike(blog)}}>like</button></p>
         <p>{blog.user?.username}</p>
+        <button onClick={() => {handleRemove(blog)}}>remove</button>
       </div>
     )
 
