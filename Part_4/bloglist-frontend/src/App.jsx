@@ -80,7 +80,8 @@ const App = () => {
 
     await blogService.updateLike(blogObject)
     const updatedblogs = await blogService.getAll()
-    setBlogs(updatedblogs)
+    const sortedBlogs = updatedblogs.sort((a,b) => b.likes - a.likes)
+    setBlogs(sortedBlogs)
   }
 
   const hideWhenVisible = {display: blogFormVisible ? "none" : ''}
