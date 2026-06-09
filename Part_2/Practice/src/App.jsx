@@ -5,6 +5,8 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Toggable'
+import NoteForm from './components/NoteForm'
 
 
 const App = () => {
@@ -15,7 +17,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user,setUser] = useState(null)
-  const [loginVisible , setLoginVisible] = useState(false)
 
   useEffect(() => {
     noteService
@@ -100,34 +101,26 @@ const App = () => {
 
   const notesToShow = showAll ? notes :notes.filter(note => note.important === true)
 
-  const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' :''}
-    const showWhenVisible = { display: loginVisible ? '' : 'none'}
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
-          <LoginForm 
-            username={username}
-            password={password}
-            handleUsernameChange={({target}) => setUsername(target.value)}
-            handlePasswordChange={({target}) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
+  const loginForm = () => (
+    <Togglable buttonLabel='login'>
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleLogin}
+      />
+    </Togglable>
+  )
 
   const noteForm = () => (
-      <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange}/>
-        <button type='submit'>save</button>
-      </form>
+    <Togglable buttonLabel="new note">
+      <NoteForm
+        newNote={newNote}
+        handleNoteChange={handleNoteChange}
+        handleSubmit={addNote}
+      />
+    </Togglable>
   )
 
   return (
