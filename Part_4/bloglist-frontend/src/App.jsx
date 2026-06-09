@@ -15,17 +15,36 @@ const App = () => {
     )  
   }, [])
 
+  if(user === null ){
+    const loggedUserJSON = window.localStorage.getItem('LoggedBlogUser')
+    if(loggedUserJSON){
+      console.log('logged in again')
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in ', username)
   
     try {
       const user = await loginService.login({username,password})
+      window.localStorage.setItem('LoggedBlogUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
     } catch {
       console.log('invalid or wrong user')
+    }
+  }
+
+  const handleLogout = () => {
+    if(user !== null){
+      window.localStorage.removeItem('LoggedBlogUser')
+      setUser(null)
+      console.log('logged out')
     }
   }
 
@@ -61,7 +80,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <h4>{user.username} logged in</h4>
+      <h4>{user.username} logged in <button onClick={handleLogout}>logout</button></h4>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
