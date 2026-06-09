@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import './index.css'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -12,11 +13,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [messageStatus, setMessageStatus] = useState('greenError')
-  const [newBlog, setNewBlog] = useState({
-    title: '',
-    author: '',
-    url: ''
-  })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -65,25 +61,18 @@ const App = () => {
     blogService.setToken(null)
   }
 
-  const addNewBlog = async (event) => {
-    event.preventDefault()
-    const blogObject = ({...newBlog})
+  const addNewBlog = async (blogObject) => {
     console.log(blogObject)
 
     const returnedData = await blogService.create(blogObject)
     setBlogs(prev => prev.concat(returnedData))
-    setNewBlog({
-      title: '',
-      author: '',
-      url: ''
-    })
     setMessageStatus('greenError')
-    setErrorMessage(`A new blog ${newBlog.title} by ${newBlog.author} added`)
+    setErrorMessage(`A new blog ${blogObject.title} by ${blogObject.author} added`)
     setTimeout(() => {
-      setErrorMessage(null)
+        setErrorMessage(null)
     },5000);
   }
- 
+  
 
   if (user === null){
     return (
@@ -120,40 +109,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification status={messageStatus} message={errorMessage}/> 
       <h4>{user.username} logged in <button onClick={handleLogout}>logout</button></h4>
-      <h2>Create new</h2>
-      <form onSubmit={addNewBlog}>
-        <div>
-          <label>
-            title:
-            <input
-              type="text"
-              value={newBlog.title}
-             onChange={({target}) => setNewBlog({...newBlog,title:target.value})} 
-               />
-          </label>
-        </div>
-        <div>
-          <label>
-            author:
-            <input
-              type="text"
-              value={newBlog.author}
-              onChange={({target}) => setNewBlog({...newBlog, author:target.value})} 
-              />
-          </label>
-        </div>
-        <div>
-          <label>
-            url
-            <input
-              type="text"
-              value={newBlog.url}
-              onChange={({target}) => setNewBlog({...newBlog, url:target.value})}
-              />
-          </label>
-        </div>
-        <button type='submit'>create</button>
-      </form>
+      <BlogForm createBlog={addNewBlog}/>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
