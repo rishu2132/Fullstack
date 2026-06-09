@@ -2,12 +2,16 @@ import { useState, useEffect,} from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [messageStatus, setMessageStatus] = useState('greenError')
   const [newBlog, setNewBlog] = useState({
     title: '',
     author: '',
@@ -43,6 +47,11 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
+      setMessageStatus('redError')
+      setErrorMessage('wrong username or password')
+      setTimeout(() => {
+        setErrorMessage(null)
+      },3000)
       console.log('invalid or wrong user')
     }
   }
@@ -68,6 +77,11 @@ const App = () => {
       author: '',
       url: ''
     })
+    setMessageStatus('greenError')
+    setErrorMessage(`A new blog ${newBlog.title} by ${newBlog.author} added`)
+    setTimeout(() => {
+      setErrorMessage(null)
+    },5000);
   }
  
 
@@ -75,6 +89,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification status={messageStatus} message={errorMessage}/>
         <form onSubmit={handleLogin}>
           <div>
             <label>username
@@ -103,6 +118,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification status={messageStatus} message={errorMessage}/> 
       <h4>{user.username} logged in <button onClick={handleLogout}>logout</button></h4>
       <h2>Create new</h2>
       <form onSubmit={addNewBlog}>
