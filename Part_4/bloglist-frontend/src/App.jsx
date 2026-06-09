@@ -13,6 +13,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [messageStatus, setMessageStatus] = useState('greenError')
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -72,6 +73,9 @@ const App = () => {
         setErrorMessage(null)
     },5000);
   }
+
+  const hideWhenVisible = {display: blogFormVisible ? "none" : ''}
+  const showWhenVisible = {display: blogFormVisible ? "" : "none"}
   
 
   if (user === null){
@@ -109,7 +113,14 @@ const App = () => {
       <h2>blogs</h2>
       <Notification status={messageStatus} message={errorMessage}/> 
       <h4>{user.username} logged in <button onClick={handleLogout}>logout</button></h4>
-      <BlogForm createBlog={addNewBlog}/>
+      <div style={hideWhenVisible}>
+        <button onClick={() => setBlogFormVisible(true)}>create new blog</button>
+      </div>
+      <div style={showWhenVisible}>
+        <BlogForm createBlog={addNewBlog}/>
+        <button onClick={() => setBlogFormVisible(false)}>cancel</button>
+      </div>
+      
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
