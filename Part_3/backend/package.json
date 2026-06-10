@@ -10,7 +10,8 @@
     "start": "NODE_ENV=production  node index.js",
     "dev": "NODE_ENV=development node --watch index.js",
     "test": "NODE_ENV=test node --test",
-    "build:ui": "rm -rf dist && cd ../../Part_2/Practice && npm run build && cp -r dist ../../Part_3/backend "
+    "build:ui": "rm -rf dist && cd ../../Part_2/Practice && npm run build && cp -r dist ../../Part_3/backend ",
+    "start:test" : "NODE_ENV=test node --watch index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
