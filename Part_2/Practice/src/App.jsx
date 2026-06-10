@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
 import noteService from './services/notes'
 import Notification from './components/Notification'
@@ -29,26 +29,25 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
+    if (!loggedUserJSON) return
+    const user = JSON.parse(loggedUserJSON)
+    setUser(user) //eslint-disable-line -- intentional: init from localStorage on mount
+    noteService.setToken(user.token)
   },[])
 
   const toggleImportanceOf = (id) => {
-    
+
     const note = notes.find(n => n.id === id)
-    const changedNote = {...note, important: !note.important}
+    const changedNote = { ...note, important: !note.important }
 
     noteService
       .update(id,changedNote)
       .then(returnedNote => {
-      setNotes(notes.map(note => note.id === id ? returnedNote : note))
+        setNotes(notes.map(note => note.id === id ? returnedNote : note))
       })
-      .catch(() =>{
+      .catch(() => {
         setErrorMessage(`Note '${note.content}' was already removed from server`)
-        setTimeout(()=> {
+        setTimeout(() => {
           setErrorMessage(null)
         },5000)
         setNotes(notes.filter(n => n.id !== id))
@@ -60,7 +59,7 @@ const App = () => {
     event.preventDefault()
     console.log('logging in with',username,password)
     try {
-      const user = await loginService.login({username,password})
+      const user = await loginService.login({ username,password })
 
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
@@ -85,7 +84,7 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
       })
-    
+
   }
 
   const notesToShow = showAll ? notes :notes.filter(note => note.important === true)
@@ -126,7 +125,7 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note => <Note key={note.id} note={note} toggleImportance={()=> toggleImportanceOf(note.id)}/>)}
+        {notesToShow.map(note => <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>)}
       </ul>
       <Footer/>
     </div>
