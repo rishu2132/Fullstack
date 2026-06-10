@@ -26,7 +26,7 @@ const Blog = ({ blog, updateLike, removeBlog, user }) => {
   }
 
   const blogDetail = () => (
-    <div>
+    <div className='blog-details'>
       <p>{blog.url}</p>
       <p>likes {blog.likes} <button onClick={() => {increaseLike(blog)}}>like</button></p>
       <p>{blog.user?.username}</p>
@@ -35,7 +35,7 @@ const Blog = ({ blog, updateLike, removeBlog, user }) => {
   )
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog-summary'>
       <div >
         {blog.title} {blog.author}
         <button onClick ={() => {setBlogView(prev => !prev)}}>{blogView ? 'hide' :'view'}</button>
