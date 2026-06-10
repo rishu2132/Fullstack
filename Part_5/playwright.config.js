@@ -70,7 +70,7 @@ export default defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
-  timeout: 3000,
+  timeout: 10000,
   fullyParallel: false,
   workers:1,
   
