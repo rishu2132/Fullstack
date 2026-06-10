@@ -1,5 +1,6 @@
 import { render ,screen } from '@testing-library/react'
 import Note from './Note'
+import { expect } from 'vitest'
 
 test('render content' , () => {
   const note  = {
@@ -7,7 +8,7 @@ test('render content' , () => {
     important: true
   }
 
-  render(<Note note={note}/>)
-  const element = screen.getByText('Component testing is done with react-testing-library')
-  expect(element).toBeDefined()
+  const { container } = render(<Note note={note}/>)
+  const div = container.querySelector('.note')
+  expect(div).toHaveTextContent('Component testing is done with react-testing-library')
 })
