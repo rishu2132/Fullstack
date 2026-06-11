@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const {loginWith , createBlog} = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -19,17 +20,14 @@ describe('Blog app', () => {
 
   describe('login', () => {
     test('succeed with correct credentials', async ({page}) => {
-        await page.getByLabel('username').fill('mluukkai')
-        await page.getByLabel('password').fill('salainen')
-        await page.getByRole('button', {name:'login'}).click()
+        await loginWith(page,'mluukkai','salainen')
+
         await expect(page.getByText('blogs')).toBeVisible()
         await expect(page.getByText('mluukkai logged in')).toBeVisible()
     })
 
     test('fails with wrong credentials', async ({page}) => {
-        await page.getByLabel('username').fill('mluukkai')
-        await page.getByLabel('password').fill('wrong')
-        await page.getByRole('button', {name:'login'}).click()
+        await loginWith(page,'mluukkai','wrong')
 
         await expect(page.getByText('blogs')).not.toBeVisible()
         await expect(page.getByText('wrong username or password')).toBeVisible()
@@ -40,17 +38,11 @@ describe('Blog app', () => {
 
     describe('when logged in ', () => {
         beforeEach( async ({page,request}) => {
-            await page.getByLabel('username').fill('mluukkai')
-            await page.getByLabel('password').fill('salainen')
-            await page.getByRole('button', {name:'login'}).click()
+            await loginWith(page, 'mluukkai', 'salainen')
         })
 
         test('a new blog can be created', async ({page}) => {
-            await page.getByRole('button', {name: 'create new blog'}).click()
-            await page.getByLabel('title:').fill('a new blog by playwright')
-            await page.getByLabel('author:').fill('fullstack')
-            await page.getByLabel('url:').fill('404')
-            await page.getByRole('button', {name:'create'}).click()
+            await createBlog(page,'a new blog by playwright','fullstack','404')
 
             await expect(page.getByText('a new blog by playwright fullstack')).toBeVisible()
         })
