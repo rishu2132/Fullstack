@@ -1,5 +1,5 @@
 import { useState, useEffect, } from 'react'
-import { BrowserRouter as Router, Routes , Route , Link } from 'react-router-dom'
+import { Routes , Route , Link , useMatch } from 'react-router-dom'
 import noteService from './services/notes'
 import Footer from './components/Footer'
 import Home from './components/Home'
@@ -54,8 +54,13 @@ const App = () => {
     padding: 5
   }
 
+  const match = useMatch('/notes/:id')
+  const note = match
+    ? notes.find(note => note.id === match.params.id)
+    : null
+
   return (
-    <Router>
+    <div>
       <div>
         <Link style={padding} to="/">home</Link>
         <Link style={padding} to="/notes">notes</Link>
@@ -64,7 +69,7 @@ const App = () => {
 
       <Routes>
         <Route path="/notes/:id" element={
-          <Note notes={notes} toggleImportanceOf={toggleImportanceOf} deleteNote={deleteNote} />
+          <Note note={note} toggleImportanceOf={toggleImportanceOf} deleteNote={deleteNote} />
         } />
         <Route path="/notes" element={
           <NoteList notes={notes} />
@@ -76,7 +81,7 @@ const App = () => {
 
       </Routes>
       <Footer />
-    </Router>
+    </div>
   )
 }
 
