@@ -11,6 +11,13 @@ describe('Blog app', () => {
             password: 'salainen'
         }
     })
+    await request.post('http://localhost:5173/api/users', {
+        data: {
+            name: 'Superuser',
+            username: 'rooter',
+            password: 'salainen'
+        }
+    })
     await page.goto('http://localhost:5173')
   })
 
@@ -72,15 +79,21 @@ describe('Blog app', () => {
                 })
                 const blogElement = await page.locator('.blog-summary').filter({hasText: 'come on work'})
 
-               
-               
                 await blogElement.getByRole('button', {name: 'view'}).click()
                 await expect(page.getByText('remove')).toBeVisible()
-
-                
                 await blogElement.getByRole('button',{name:'remove'}).click()
                
                 await expect(page.getByText('come on work')).not.toBeVisible()
+            })
+
+            test('user can only see the delete button', async({page}) => {
+                await page.getByRole('button',{name:'logout'}).click()
+                await loginWith(page,'rooter','salainen')
+                await expect(page.getByText('rooter logged in')).toBeVisible()
+
+                const blogElement = await page.getByText('a default blog compiler')
+                await blogElement.getByRole('button',{name:'view'}).click()
+                await expect(page.getByText('remove')).not.toBeVisible()
             })
         })
 
