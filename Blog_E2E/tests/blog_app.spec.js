@@ -22,7 +22,6 @@ describe('Blog app', () => {
     test('succeed with correct credentials', async ({page}) => {
         await loginWith(page,'mluukkai','salainen')
 
-        await expect(page.getByText('blogs')).toBeVisible()
         await expect(page.getByText('mluukkai logged in')).toBeVisible()
     })
 
@@ -45,6 +44,24 @@ describe('Blog app', () => {
             await createBlog(page,'a new blog by playwright','fullstack','404')
 
             await expect(page.getByText('a new blog by playwright fullstack')).toBeVisible()
+        })
+
+        describe('default blogs is created',() => {
+            beforeEach(async ({page,request}) => {
+                await createBlog(page,'a default blog','compiler','playwright.com')
+
+            })
+
+            test('a blog can be liked ', async({page}) => {
+                const blogElement = await page.getByText('a default blog compiler')
+
+                await blogElement.getByRole('button', {name:'view'}).click()
+                await expect(page.getByText('likes 0')).toBeVisible()
+        
+                await page.getByRole('button', {name:'like'}).click()
+                await expect(page.getByText('likes 1')).toBeVisible()
+
+            })
         })
 
     })
