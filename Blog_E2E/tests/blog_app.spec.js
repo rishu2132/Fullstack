@@ -37,4 +37,23 @@ describe('Blog app', () => {
 
     
     })
+
+    describe('when logged in ', () => {
+        beforeEach( async ({page,request}) => {
+            await page.getByLabel('username').fill('mluukkai')
+            await page.getByLabel('password').fill('salainen')
+            await page.getByRole('button', {name:'login'}).click()
+        })
+
+        test('a new blog can be created', async ({page}) => {
+            await page.getByRole('button', {name: 'create new blog'}).click()
+            await page.getByLabel('title:').fill('a new blog by playwright')
+            await page.getByLabel('author:').fill('fullstack')
+            await page.getByLabel('url:').fill('404')
+            await page.getByRole('button', {name:'create'}).click()
+
+            await expect(page.getByText('a new blog by playwright fullstack')).toBeVisible()
+        })
+
+    })
 })

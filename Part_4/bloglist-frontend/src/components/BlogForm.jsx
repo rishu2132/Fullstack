@@ -47,7 +47,7 @@ const BlogForm = ({ createBlog }) => {
         </div>
         <div>
           <label>
-              url
+              url:
             <input
               type="text"
               value={newBlog.url}
