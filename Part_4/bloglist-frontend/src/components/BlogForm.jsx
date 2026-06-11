@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const BlogForm = ({ createBlog , blogFormVisible }) => {
+const BlogForm = ({ createBlog }) => {
   const [newBlog, setNewBlog] = useState({
     title: '',
     author: '',
     url: ''
   })
+
+  const navigate = useNavigate()
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -16,8 +19,7 @@ const BlogForm = ({ createBlog , blogFormVisible }) => {
         author: '',
         url: ''
       })
-      blogFormVisible(false)
-
+      navigate('/')
     } catch {
       console.log('error posting blog')
     }

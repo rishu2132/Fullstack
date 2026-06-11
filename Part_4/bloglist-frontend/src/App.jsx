@@ -60,17 +60,17 @@ const App = () => {
     : null
 
 
-  // const addNewBlog = async (blogObject) => {
-  //   console.log(blogObject)
+  const addNewBlog = async (blogObject) => {
+    console.log(blogObject)
 
-  //   const returnedData = await blogService.create(blogObject)
-  //   setBlogs(prev => prev.concat({ ...returnedData, user:user }))
-  //   setMessageStatus('greenError')
-  //   setErrorMessage(`A new blog ${blogObject.title} by ${blogObject.author} added`)
-  //   setTimeout(() => {
-  //     setErrorMessage(null)
-  //   },5000)
-  // }
+    const returnedData = await blogService.create(blogObject)
+    setBlogs(prev => prev.concat({ ...returnedData, user:user }))
+    // setMessageStatus('greenError')
+    // setErrorMessage(`A new blog ${blogObject.title} by ${blogObject.author} added`)
+    // setTimeout(() => {
+    //   setErrorMessage(null)
+    // },5000)
+  }
 
 
   const updateLikes = async (blogObject) => {
@@ -98,12 +98,14 @@ const App = () => {
     <div>
       <div>
         <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/create">new Blog</Link>
         {user
           ? <button style={padding} onClick={handleLogout}>logout</button>
           : <Link style={padding} to="/login">login</Link>}
 
       </div>
       <Routes>
+        <Route path='/create' element={<BlogForm createBlog={addNewBlog}/>}/>
         <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes}/>}/>
         <Route path='/' element={<BlogList blogs={blogs} />}/>
         <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
