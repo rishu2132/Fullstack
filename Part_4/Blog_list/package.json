@@ -10,7 +10,8 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development node --watch index.js",
     "test": "NODE_ENV=test node --test",
-    "build:ui": "rm -rf dist && cd ../bloglist-frontend && npm run build && cp -r dist ../Blog_list "
+    "build:ui": "rm -rf dist && cd ../bloglist-frontend && npm run build && cp -r dist ../Blog_list ",
+    "start:test": "NODE_ENV=test node --watch index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
