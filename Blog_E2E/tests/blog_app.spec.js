@@ -3,21 +3,22 @@ const {loginWith , createBlog} = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
-    await request.post('http://localhost:5173/api/testing/reset')
-    await request.post('http://localhost:5173/api/users', {
+    await request.post('/api/testing/reset')
+    await request.post('/api/users', {
         data: {
             name: 'Matti Luukkainen',
             username: 'mluukkai',
             password: 'salainen'
         }
     })
-    await request.post('http://localhost:5173/api/users', {
+    await request.post('/api/users', {
         data: {
             name: 'Superuser',
             username: 'rooter',
             password: 'salainen'
         }
     })
+   
     await page.goto('http://localhost:5173')
   })
 
@@ -51,6 +52,7 @@ describe('Blog app', () => {
             await createBlog(page,'a new blog by playwright','fullstack','404')
 
             await expect(page.getByText('a new blog by playwright fullstack')).toBeVisible()
+
         })
 
         describe('default blogs is created',() => {
@@ -71,6 +73,32 @@ describe('Blog app', () => {
                 await expect(page.getByText('likes 1')).toBeVisible()
 
             })
+
+            test('ordered blog', async({page}) => {
+                
+                await createBlog(page, 'least liked blog', 'author1', 'http://url1.com')
+                await createBlog(page, 'most liked blog', 'author2', 'http://url2.com')
+                await createBlog(page, 'middle liked blog', 'author3', 'http://url3.com')
+
+                const blog1 = page.locator('.blog-summary').filter({ hasText: 'most liked blog' })
+                await blog1.getByRole('button', { name: 'view' }).click()
+                await blog1.getByRole('button', { name: 'like' }).click()
+                await expect(blog1.getByText('likes 1')).toBeVisible()
+                await blog1.getByRole('button', { name: 'like' }).click()
+                await expect(blog1.getByText('likes 2')).toBeVisible()
+
+                const blog2 = page.locator('.blog-summary').filter({ hasText: 'middle liked blog' })
+                await blog2.getByRole('button', { name: 'view' }).click()
+                await blog2.getByRole('button', { name: 'like' }).click()
+                await expect(blog2.getByText('likes 1')).toBeVisible()
+
+                const blogs = page.locator('.blog-summary')
+                await expect(blogs.first()).toContainText('most liked blog')
+                await expect(blogs.nth(1)).toContainText('middle liked blog')
+                await expect(blogs.last()).toContainText('least liked blog')
+            })
+                
+    
 
             test('a blog can be deleted', async ({page}) => {
                await createBlog(page,'come on','work','you shit')
@@ -95,6 +123,7 @@ describe('Blog app', () => {
                 await blogElement.getByRole('button',{name:'view'}).click()
                 await expect(page.getByText('remove')).not.toBeVisible()
             })
+
         })
 
     })
