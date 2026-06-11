@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import loginService from '../services/login'
 import noteService from '../services/notes'
-import Note from './Note'
 import Notification from './Notification'
 import Togglable from './Toggable'
 

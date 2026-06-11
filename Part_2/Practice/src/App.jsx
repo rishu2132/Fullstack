@@ -10,9 +10,6 @@ import NoteForm from './components/NoteForm'
 const App = () => {
   const [notes, setNotes] = useState([])
 
-
-
-
   useEffect(() => {
     noteService
       .getAll()
@@ -20,6 +17,12 @@ const App = () => {
         setNotes(initialNotes)
       })
   },[])
+
+  const deleteNote = (id) => {
+    noteService.remove(id).then(() => {
+      setNotes(notes.filter(n => n.id !== id))
+    })
+  }
 
   const toggleImportanceOf = (id) => {
 
@@ -61,7 +64,7 @@ const App = () => {
 
       <Routes>
         <Route path="/notes/:id" element={
-          <Note notes={notes} toggleImportanceOf={toggleImportanceOf} />
+          <Note notes={notes} toggleImportanceOf={toggleImportanceOf} deleteNote={deleteNote} />
         } />
         <Route path="/notes" element={
           <NoteList notes={notes} />
