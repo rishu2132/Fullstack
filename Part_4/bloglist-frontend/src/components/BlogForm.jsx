@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = ({ createBlog , blogFormVisible }) => {
   const [newBlog, setNewBlog] = useState({
     title: '',
     author: '',
@@ -16,6 +16,8 @@ const BlogForm = ({ createBlog }) => {
         author: '',
         url: ''
       })
+      blogFormVisible(false)
+
     } catch {
       console.log('error posting blog')
     }

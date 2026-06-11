@@ -48,7 +48,9 @@ describe('Blog app', () => {
 
         describe('default blogs is created',() => {
             beforeEach(async ({page,request}) => {
+                
                 await createBlog(page,'a default blog','compiler','playwright.com')
+                await createBlog(page,'a default blog2','browser','201')
 
             })
 
@@ -61,6 +63,24 @@ describe('Blog app', () => {
                 await page.getByRole('button', {name:'like'}).click()
                 await expect(page.getByText('likes 1')).toBeVisible()
 
+            })
+
+            test('a blog can be deleted', async ({page}) => {
+               await createBlog(page,'come on','work','you shit')
+                page.on('dialog', async(dialog) => {
+                    await dialog.accept()
+                })
+                const blogElement = await page.locator('.blog-summary').filter({hasText: 'come on work'})
+
+               
+               
+                await blogElement.getByRole('button', {name: 'view'}).click()
+                await expect(page.getByText('remove')).toBeVisible()
+
+                
+                await blogElement.getByRole('button',{name:'remove'}).click()
+               
+                await expect(page.getByText('come on work')).not.toBeVisible()
             })
         })
 

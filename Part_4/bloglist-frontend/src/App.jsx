@@ -67,7 +67,7 @@ const App = () => {
     console.log(blogObject)
 
     const returnedData = await blogService.create(blogObject)
-    setBlogs(prev => prev.concat(returnedData))
+    setBlogs(prev => prev.concat({ ...returnedData, user:user }))
     setMessageStatus('greenError')
     setErrorMessage(`A new blog ${blogObject.title} by ${blogObject.author} added`)
     setTimeout(() => {
@@ -133,7 +133,7 @@ const App = () => {
         <button onClick={() => setBlogFormVisible(true)}>create new blog</button>
       </div>
       <div style={showWhenVisible}>
-        <BlogForm createBlog={addNewBlog}/>
+        <BlogForm createBlog={addNewBlog} blogFormVisible={setBlogFormVisible}/>
         <button onClick={() => setBlogFormVisible(false)}>cancel</button>
       </div>
 
