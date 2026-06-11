@@ -1,8 +1,8 @@
 import { useState, useEffect, } from 'react'
-import { BrowserRouter as Router, Routes , Route , Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes , Route , Link , useNavigate } from 'react-router-dom'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-//import loginService from './services/login'
+import loginService from './services/login'
 import Notification from './components/Notification'
 import './index.css'
 import BlogForm from './components/BlogForm'
@@ -10,10 +10,13 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([])
+  const [user, setUser] = useState(null)
   // const [errorMessage, setErrorMessage] = useState(null)
   // const [messageStatus, setMessageStatus] = useState('greenError')
   // const [blogFormVisible, setBlogFormVisible] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -22,15 +25,35 @@ const App = () => {
   }, [])
 
 
-  // if(user === null ){
-  //   const loggedUserJSON = window.localStorage.getItem('LoggedBlogUser')
-  //   if(loggedUserJSON){
-  //     console.log('logged in again')
-  //     const user = JSON.parse(loggedUserJSON)
-  //     blogService.setToken(user.token)
-  //     setUser(user)
-  //   }
-  // }
+  const handleLogin = async (username, password) => {
+    console.log('logging in ', username)
+
+    try {
+      const user = await loginService.login({ username,password })
+      window.localStorage.setItem('LoggedBlogUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      setUser(user)
+      //navigate('/')
+    } catch {
+      //setMessageStatus('redError')
+      //setErrorMessage('wrong username or password')
+      //setTimeout(() => {
+      //setErrorMessage(null)
+      //},3000)
+      //console.log('invalid or wrong user')
+    }
+  }
+
+  const handleLogout = () => {
+    if(user !== null){
+      window.localStorage.removeItem('LoggedBlogUser')
+      setUser(null)
+      console.log('logged out')
+      blogService.setToken(null)
+      navigate('/')
+    }
+  }
+
 
 
   // const addNewBlog = async (blogObject) => {
@@ -68,16 +91,19 @@ const App = () => {
   }
 
   return (
-    <Router>
+    <div>
       <div>
         <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/login">login</Link>
+        {user
+          ? <button style={padding} onClick={handleLogout}>logout</button>
+          : <Link style={padding} to="/login">login</Link>}
+
       </div>
       <Routes>
-        <Route path='/' element={<BlogList/>}/>
-        <Route path='/login' element={<LoginForm/>}/>
+        <Route path='/' element={<BlogList blogs={blogs} />}/>
+        <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
       </Routes>
-    </Router>
+    </div>
   )
 
 

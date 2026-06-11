@@ -1,47 +1,43 @@
 import { useState } from 'react'
-import  loginService  from '../services/login'
-import blogService  from '../services/blogs'
+import { useNavigate , Link } from 'react-router-dom'
 
-const LoginForm = () => {
+
+const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
-  const handleLogin = async (event) => {
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log('logging in ', username)
-
     try {
-      const user = await loginService.login({ username,password })
-      window.localStorage.setItem('LoggedBlogUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
+      await handleLogin(username, password)
       setUsername('')
       setPassword('')
+      navigate('/')
     } catch {
-      //setMessageStatus('redError')
-      //setErrorMessage('wrong username or password')
-      //setTimeout(() => {
-      //setErrorMessage(null)
-      //},3000)
-      //console.log('invalid or wrong user')
+      console.log('error during login')
     }
   }
+  //   if(user === null ){
+  //     const loggedUserJSON = window.localStorage.getItem('LoggedBlogUser')
+  //     if(loggedUserJSON){
+  //       console.log('logged in again')
+  //       const user = JSON.parse(loggedUserJSON)
+  //       blogService.setToken(user.token)
+  //       setUser(user)
+  //     }
+  //   }
 
-  const handleLogout = () => {
-    if(user !== null){
-      window.localStorage.removeItem('LoggedBlogUser')
-      setUser(null)
-      console.log('logged out')
-    }
-    blogService.setToken(null)
-  }
+
+
 
   return (
     <div>
       <h2>Log in to application</h2>
       {/* <Notification status={messageStatus} message={errorMessage}/> */}
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>username
             <input
@@ -65,6 +61,7 @@ const LoginForm = () => {
       </form>
     </div>
   )
+
 }
 
 export default LoginForm
