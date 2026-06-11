@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes , Route , Link } from 'react-router-dom
 import noteService from './services/notes'
 import Footer from './components/Footer'
 import Home from './components/Home'
+import Note from './components/Note'
 import NoteList from './components/NoteList'
 import NoteForm from './components/NoteForm'
 
@@ -19,6 +20,22 @@ const App = () => {
         setNotes(initialNotes)
       })
   },[])
+
+  const toggleImportanceOf = (id) => {
+
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    noteService
+      .update(id,changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => (note.id !== id ? note: returnedNote)))
+      })
+      .catch(() => {
+        setNotes(notes.filter(n => n.id !== id))
+      })
+
+  }
 
 
   const addNote = (noteObject) => {
@@ -43,6 +60,9 @@ const App = () => {
       </div>
 
       <Routes>
+        <Route path="/notes/:id" element={
+          <Note notes={notes} toggleImportanceOf={toggleImportanceOf} />
+        } />
         <Route path="/notes" element={
           <NoteList notes={notes} />
         } />
@@ -50,6 +70,7 @@ const App = () => {
           <NoteForm createNote={addNote}/>
         } />
         <Route path="/" element={<Home />} />
+
       </Routes>
       <Footer />
     </Router>
