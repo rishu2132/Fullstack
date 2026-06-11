@@ -1,22 +1,14 @@
-import { useState } from 'react'
 
-const Blog = ({ blog, updateLike, removeBlog, user }) => {
-  const [blogView, setBlogView] = useState(false)
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+
+const Blog = ({ blog, updateLikes, removeBlog, user }) => {
 
   const increaseLike = (blog) => {
     const updatedBlog = ({ ...blog, likes:blog.likes + 1 })
-    updateLike(updatedBlog)
+    updateLikes(updatedBlog)
   }
 
   const handleRemove = (blog) => {
-    if (blog.user?.username === user.username){
+    if (blog.user?.username === user?.username){
       if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}`)){
         removeBlog(blog.id)
       }
@@ -25,22 +17,21 @@ const Blog = ({ blog, updateLike, removeBlog, user }) => {
     }
   }
 
-  const blogDetail = () => (
-    <div className='blog-details'>
-      <p>{blog.url}</p>
-      <p>likes {blog.likes} <button onClick={() => {increaseLike(blog)}}>like</button></p>
-      <p>{blog.user?.username}</p>
-      {blog.user?.username === user.username ? <button onClick={() => {handleRemove(blog)}}>remove</button> : null}
-    </div>
-  )
+  if(!blog){
+    return null
+  }
 
   return (
-    <div style={blogStyle} className='blog-summary'>
+    <div className='blog'>
       <div >
-        {blog.title} {blog.author}
-        <button onClick ={() => {setBlogView(prev => !prev)}}>{blogView ? 'hide' :'view'}</button>
+        <h2>{`${blog.author}:${blog.title}`}</h2>
       </div>
-      {blogView && blogDetail()}
+      <div>
+        <a href={blog.url}>{blog.url}</a>
+        <span>likes {blog.likes} <button onClick={() => {increaseLike(blog)}}>like</button></span>
+        <p>{`Added by ${blog.user?.username}`}</p>
+        {blog.user?.username === user?.username ? <button onClick={() => {handleRemove(blog)}}>remove</button> : null}
+      </div>
     </div>
 
   )

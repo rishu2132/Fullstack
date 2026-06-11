@@ -1,5 +1,5 @@
 import { useState, useEffect, } from 'react'
-import { BrowserRouter as Router, Routes , Route , Link , useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes , Route , Link , useNavigate, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -54,6 +54,10 @@ const App = () => {
     }
   }
 
+  const match = useMatch('/:id')
+  const blog = match
+    ? blogs.find(blog => blog.id === match.params.id)
+    : null
 
 
   // const addNewBlog = async (blogObject) => {
@@ -69,13 +73,13 @@ const App = () => {
   // }
 
 
-  // const updateLikes = async (blogObject) => {
+  const updateLikes = async (blogObject) => {
 
-  //   await blogService.updateLike(blogObject)
-  //   const updatedblogs = await blogService.getAll()
-  //   const sortedBlogs = updatedblogs.sort((a,b) => b.likes - a.likes)
-  //   setBlogs(sortedBlogs)
-  // }
+    await blogService.updateLike(blogObject)
+    const updatedblogs = await blogService.getAll()
+    const sortedBlogs = updatedblogs.sort((a,b) => b.likes - a.likes)
+    setBlogs(sortedBlogs)
+  }
 
   // const removeBlog = async (id) => {
   //   await blogService.remove(id)
@@ -100,6 +104,7 @@ const App = () => {
 
       </div>
       <Routes>
+        <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes}/>}/>
         <Route path='/' element={<BlogList blogs={blogs} />}/>
         <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
       </Routes>
