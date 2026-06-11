@@ -1,4 +1,4 @@
-
+import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blog, updateLikes, removeBlog, user }) => {
 
@@ -6,11 +6,12 @@ const Blog = ({ blog, updateLikes, removeBlog, user }) => {
     const updatedBlog = ({ ...blog, likes:blog.likes + 1 })
     updateLikes(updatedBlog)
   }
-
+  const navigate = useNavigate()
   const handleRemove = (blog) => {
     if (blog.user?.username === user?.username){
       if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}`)){
         removeBlog(blog.id)
+        navigate('/')
       }
     } else {
       console.log('not the user who created')

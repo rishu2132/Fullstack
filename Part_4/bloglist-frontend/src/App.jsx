@@ -79,13 +79,14 @@ const App = () => {
     const updatedblogs = await blogService.getAll()
     const sortedBlogs = updatedblogs.sort((a,b) => b.likes - a.likes)
     setBlogs(sortedBlogs)
+    navigate('/')
   }
 
-  // const removeBlog = async (id) => {
-  //   await blogService.remove(id)
-  //   const updatedBlog = await blogService.getAll()
-  //   setBlogs(updatedBlog)
-  // }
+  const removeBlog = async (id) => {
+    await blogService.remove(id)
+    const updatedBlog = await blogService.getAll()
+    setBlogs(updatedBlog)
+  }
 
   // const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
   // const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
@@ -106,7 +107,7 @@ const App = () => {
       </div>
       <Routes>
         <Route path='/create' element={<BlogForm createBlog={addNewBlog}/>}/>
-        <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes}/>}/>
+        <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/>}/>
         <Route path='/' element={<BlogList blogs={blogs} />}/>
         <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
       </Routes>
