@@ -79,7 +79,6 @@ const App = () => {
     const updatedblogs = await blogService.getAll()
     const sortedBlogs = updatedblogs.sort((a,b) => b.likes - a.likes)
     setBlogs(sortedBlogs)
-    navigate('/')
   }
 
   const removeBlog = async (id) => {
