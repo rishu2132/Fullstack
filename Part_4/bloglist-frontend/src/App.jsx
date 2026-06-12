@@ -13,6 +13,7 @@ import LoginForm from './components/LoginForm'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
   // const [errorMessage, setErrorMessage] = useState(null)
   // const [messageStatus, setMessageStatus] = useState('greenError')
   // const [blogFormVisible, setBlogFormVisible] = useState(false)
@@ -34,14 +35,15 @@ const App = () => {
       window.localStorage.setItem('LoggedBlogUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      //navigate('/')
+      setNotification({ text: `${username} logged in`, type:'success' })
+      setTimeout(() => {
+        setNotification(null)
+      },5000)
     } catch {
-      //setMessageStatus('redError')
-      //setErrorMessage('wrong username or password')
-      //setTimeout(() => {
-      //setErrorMessage(null)
-      //},3000)
-      //console.log('invalid or wrong user')
+      setNotification({ text:'wrong username or password', type:'error' })
+      setTimeout(() => {
+        setNotification(null)
+      },5000)
     }
   }
 
@@ -66,11 +68,10 @@ const App = () => {
 
     const returnedData = await blogService.create(blogObject)
     setBlogs(prev => prev.concat({ ...returnedData, user:user }))
-    // setMessageStatus('greenError')
-    // setErrorMessage(`A new blog ${blogObject.title} by ${blogObject.author} added`)
-    // setTimeout(() => {
-    //   setErrorMessage(null)
-    // },5000)
+    setNotification({ text: `a new blog ${returnedData.title} by ${returnedData.author} added`, type:'success' })
+    setTimeout(() => {
+      setNotification(null)
+    },5000)
   }
 
 
@@ -112,6 +113,8 @@ const App = () => {
             }
           </Toolbar>
         </AppBar>
+
+        <Notification notification={notification}/>
 
         <Routes>
           <Route path='/create' element={<BlogForm createBlog={addNewBlog}/>}/>
