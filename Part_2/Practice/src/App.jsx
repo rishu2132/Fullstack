@@ -1,5 +1,5 @@
 import { useState, useEffect, } from 'react'
-import { Container } from '@mui/material'
+import { Container, Toolbar, Button, AppBar } from '@mui/material'
 import { Routes , Route , Link , useMatch } from 'react-router-dom'
 import noteService from './services/notes'
 import Footer from './components/Footer'
@@ -7,9 +7,11 @@ import Home from './components/Home'
 import Note from './components/Note'
 import NoteList from './components/NoteList'
 import NoteForm from './components/NoteForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const [notes, setNotes] = useState([])
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     noteService
@@ -47,13 +49,15 @@ const App = () => {
       .create(noteObject)
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
+        setNotification({ text: `'${returnedNote.content}' added!`, type: 'success' })
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
 
   }
 
-  const padding = {
-    padding: 5
-  }
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
 
   const match = useMatch('/notes/:id')
   const note = match
@@ -63,11 +67,21 @@ const App = () => {
   return (
     <Container>
       <div>
-        <div>
-          <Link style={padding} to="/">home</Link>
-          <Link style={padding} to="/notes">notes</Link>
-          <Link style={padding} to="/create">new note</Link>
-        </div>
+        <AppBar position="static">
+          <Toolbar>
+            <Button color="inherit" component={Link} to="/" sx={style}>
+          home
+            </Button>
+            <Button color="inherit" component={Link} to="/notes" sx={style}>
+          notes
+            </Button>
+            <Button color="inherit" component={Link} to="/create" sx={style}>
+          new note
+            </Button>
+          </Toolbar>
+        </AppBar>
+
+        <Notification notification={notification} />
 
         <Routes>
           <Route path="/notes/:id" element={
