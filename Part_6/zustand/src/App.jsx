@@ -2,8 +2,7 @@ import Display from './Display'
 import Control from './Control'
 
 const App = () => {
-
-
+  
   return (
     <div>
       <Display/>
