@@ -98,7 +98,10 @@ const App = () => {
     <div>
       <div>
         <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/create">new Blog</Link>
+        {user
+          ? <Link style={padding} to="/create">new Blog</Link>
+          : null
+        }
         {user
           ? <button style={padding} onClick={handleLogout}>logout</button>
           : <Link style={padding} to="/login">login</Link>}
