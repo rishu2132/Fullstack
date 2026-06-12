@@ -1,5 +1,6 @@
 import { useState, useEffect, } from 'react'
 import { BrowserRouter as Router, Routes , Route , Link , useNavigate, useMatch } from 'react-router-dom'
+import { Container,Toolbar,AppBar,Button, Typography } from '@mui/material'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -90,29 +91,35 @@ const App = () => {
   // const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
   // const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
 
-  const padding = {
-    padding:5
-  }
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
 
   return (
     <div>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
-        {user
-          ? <Link style={padding} to="/create">new Blog</Link>
-          : null
-        }
-        {user
-          ? <button style={padding} onClick={handleLogout}>logout</button>
-          : <Link style={padding} to="/login">login</Link>}
+      <Container>
+        <AppBar position='static' style={{ display:'flex' }}>
+          <Toolbar>
+            <Typography variant='h6' style={{ flexGrow:1 }}>
+              Blog App
+            </Typography>
+            <Button color='inherit' component={Link} to='/' sx={style}>Blogs</Button>
+            {user
+              ? <Button color='inherit' component={Link} to='/create' sx={style}>new Blog</Button>
+              : null
+            }
+            {user
+              ? <Button color='inherit' sx={style} onClick={handleLogout}>logout</Button>
+              :<Button color='inherit' component={Link} to='/login' sx={style}>login</Button>
+            }
+          </Toolbar>
+        </AppBar>
 
-      </div>
-      <Routes>
-        <Route path='/create' element={<BlogForm createBlog={addNewBlog}/>}/>
-        <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/>}/>
-        <Route path='/' element={<BlogList blogs={blogs} />}/>
-        <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
-      </Routes>
+        <Routes>
+          <Route path='/create' element={<BlogForm createBlog={addNewBlog}/>}/>
+          <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/>}/>
+          <Route path='/' element={<BlogList blogs={blogs} />}/>
+          <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
+        </Routes>
+      </Container>
     </div>
   )
 
