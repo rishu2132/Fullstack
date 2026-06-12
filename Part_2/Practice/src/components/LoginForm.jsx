@@ -1,3 +1,5 @@
+import { TextField, Button } from '@mui/material'
+
 const LoginForm = ({
   handleSubmit,
   handleUsernameChange,
@@ -11,26 +13,27 @@ const LoginForm = ({
 
       <form onSubmit={handleSubmit}>
         <div>
-          <label>
-          username
-            <input
-              value={username}
-              onChange={handleUsernameChange}
-            />
-          </label>
+          <TextField
+            label= "username"
+            value={username}
+            onChange={handleUsernameChange}
+          />
         </div>
         <div>
-          <label>
-          password
-            <input
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </label>
+          <TextField
+            label="password"
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            style={{ marginTop: 10 }}
+          />
         </div>
 
-        <button type="submit">login</button>
+        <div>
+          <Button type="submit" variant="contained" style={{ marginTop:10 }}>
+            save
+          </Button>
+        </div>
       </form>
     </div>
   )
