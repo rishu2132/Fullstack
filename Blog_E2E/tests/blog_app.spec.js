@@ -37,6 +37,49 @@ describe('Blog app', () => {
     await loginWith(page,'mluukkai','sala')
     await expect(page.getByRole('button',{name:'logout'})).not.toBeVisible()
   })
+
+  describe('logged in user' , () => {
+    beforeEach(async ({page,request}) => {
+        await page.getByText('login').click()
+        await loginWith(page,'mluukkai','salainen')
+    })
+
+    test('A logged-in user can create a blog',async ({page}) => {
+        await expect(page.getByText('logout')).toBeVisible()
+        await page.getByText('new Blog').click()
+        await createBlog(page,'a new blog','after modification','http:///')
+        await expect(page.getByText('a new blog by after modification')).toBeVisible()
+    })
+
+    test('a logged-in user can like a blog', async({page}) => {
+        await expect(page.getByText('logout')).toBeVisible()
+        await page.getByText('new Blog').click()
+        await createBlog(page,'test a','playwright','htpss....')
+        await expect(page.getByText('test a by playwright')).toBeVisible()
+        await page.getByText('test a by playwright').click()
+        await expect(page.getByRole('button',{name:'like'})).toBeVisible()
+        await page.getByRole('button',{name:'like'}).click()
+        await expect(page.getByText('Likes 1')).toBeVisible()
+    })
+
+     test('a logged-in user can delete a blog', async({page}) => {
+
+        page.on('dialog', async(dialog) => {
+            await dialog.accept()
+       })        
+        await expect(page.getByText('logout')).toBeVisible()
+        await page.getByText('new Blog').click()
+        await createBlog(page,'test a','playwright','htpss....')
+        await expect(page.getByText('test a by playwright')).toBeVisible()
+        await page.getByText('test a by playwright').click()
+        await expect(page.getByRole('button',{name:'remove'})).toBeVisible()
+        await page.getByRole('button',{name:'remove'}).click()
+        await expect(page.getByText('playwright:test a')).not.toBeVisible()
+        await expect(page.getByText('test a by playwright')).not.toBeVisible()
+    })
+
+
+  })
 //   describe('login', () => {
 //     test('succeed with correct credentials', async ({page}) => {
 //         await loginWith(page,'mluukkai','salainen')
