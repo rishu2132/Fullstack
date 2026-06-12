@@ -2,16 +2,21 @@ import { useState, useEffect, } from 'react'
 import { Container, Toolbar, Button, AppBar } from '@mui/material'
 import { Routes , Route , Link , useMatch } from 'react-router-dom'
 import noteService from './services/notes'
+import loginService from './services/login'
 import Footer from './components/Footer'
 import Home from './components/Home'
 import Note from './components/Note'
 import NoteList from './components/NoteList'
 import NoteForm from './components/NoteForm'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [notification, setNotification] = useState(null)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user,setUser] = useState(null)
 
   useEffect(() => {
     noteService
@@ -20,6 +25,33 @@ const App = () => {
         setNotes(initialNotes)
       })
   },[])
+
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    console.log('logging in with',username,password)
+    try {
+      const user = await loginService.login({ username,password })
+
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      )
+
+      noteService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+      setNotification({ text: `${username} logged in` , type:'success' })
+      setTimeout(() => {
+        setNotification(null)
+      },5000)
+    } catch {
+      setNotification({ text: 'wrong username or password', type:'error' })
+      setTimeout(() => {
+        setNotification(null)
+      },5000)
+    }
+  }
 
   const deleteNote = (id) => {
     noteService.remove(id).then(() => {
@@ -78,6 +110,9 @@ const App = () => {
             <Button color="inherit" component={Link} to="/create" sx={style}>
           new note
             </Button>
+            <Button color='inherit' component={Link} to='/login' sx={style}>
+              login
+            </Button>
           </Toolbar>
         </AppBar>
 
@@ -94,6 +129,13 @@ const App = () => {
             <NoteForm createNote={addNote}/>
           } />
           <Route path="/" element={<Home />} />
+          <Route path='/login' element={<LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />}/>
 
         </Routes>
         <Footer />
