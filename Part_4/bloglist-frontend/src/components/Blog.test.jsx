@@ -10,7 +10,13 @@ const blog = {
   likes:56
 }
 
-test('renders title and author only' , () => {
+const user = {
+  username: 'mluukkai',
+  name: 'root',
+  password: 'salainen'
+}
+
+test('blog info and likes are shown to unauthenticated users' , () => {
 
   render(<MemoryRouter><Blog blog={blog}/></MemoryRouter>)
   const title = screen.queryByText('rowling: a new day')
@@ -20,16 +26,12 @@ test('renders title and author only' , () => {
   expect(screen.queryByText('like')).toBeNull()
 })
 
-// test('blog url and likes are shown when button is clicked', async () => {
-//   const user = userEvent.setup()
+test('Authenticated user are shown like button', async () => {
+  render(<MemoryRouter><Blog  blog={blog} user={user}/></MemoryRouter>)
+  expect(screen.getByText(blog.url)).toBeDefined()
+  expect(screen.getByRole('button',{ name:'like' })).toBeDefined()
 
-//   render(<Blog  blog={blog}/>)
-//   const button = screen.getByText('view')
-//   await user.click(button)
-//   expect(screen.getByText(blog.url)).toBeDefined()
-//   expect(screen.queryByText(`Likes ${blog.likes}`)).toBeDefined()
-
-// })
+})
 
 // test('like button is cliked twice', async () => {
 //   const mockHandler = vi.fn()
