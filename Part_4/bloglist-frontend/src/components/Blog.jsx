@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import { Card, CardActions, CardContent, Box, Button, Typography } from '@mui/material'
+
 
 const Blog = ({ blog, updateLikes, removeBlog, user }) => {
 
@@ -25,15 +27,39 @@ const Blog = ({ blog, updateLikes, removeBlog, user }) => {
 
   return (
     <div className='blog'>
-      <div >
-        <h2>{`${blog.author}:${blog.title}`}</h2>
-      </div>
-      <div>
-        <a href={blog.url}>{blog.url}</a>
-        <p>likes {blog.likes} {user ? <button onClick={() => {increaseLike(blog)}}>like</button>: null }</p>
-        <p>{`Added by ${blog.user?.username}`}</p>
-        {blog.user?.username === user?.username ? <button onClick={() => {handleRemove(blog)}}>remove</button> : null}
-      </div>
+      <Box >
+        <Card sx={{ minWidth:275, marginTop:5 }} variant='outlined'>
+          <CardContent>
+            <Typography variant='h5'>{blog.title}</Typography>
+            <Typography>{`by ${blog.author}`}</Typography>
+            <a href={blog.url}>{blog.url}</a>
+            <Typography >{`Added by ${blog.user?.username}`}</Typography>
+            <Typography>
+              <span>{`${blog.likes} likes`}</span>
+              {user
+                ? <Button
+                  onClick={() => {increaseLike(blog)}}
+                  variant='outlined'
+                  style={{ marginLeft:10, borderRadius:5 }}
+                >
+                like
+                </Button>: null }
+              {blog.user?.username === user?.username
+                ?
+                <Button
+                  color='error'
+                  onClick={() => {handleRemove(blog)}}
+                  variant='outlined'
+                  style={{ marginLeft:10, borderRadius:5, }}
+                >
+                  remove
+                </Button> : null}
+            </Typography>
+          </CardContent>
+
+
+        </Card>
+      </Box>
     </div>
 
   )
