@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate , Link } from 'react-router-dom'
+import { Button,TextField } from '@mui/material'
 
 
 const LoginForm = ({ handleLogin }) => {
@@ -39,25 +40,29 @@ const LoginForm = ({ handleLogin }) => {
       {/* <Notification status={messageStatus} message={errorMessage}/> */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>username
-            <input
-              type="text"
-              value = {username}
-              onChange = {({ target }) => setUsername(target.value)}
-            />
-          </label>
+          <TextField
+            label='username'
+            variant='standard'
+            type="text"
+            value = {username}
+            onChange = {({ target }) => setUsername(target.value)}
+          />
         </div>
         <div>
-          <label >
-            password
-            <input
-              type="password"
-              value= {password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </label>
+          <TextField
+            label='password'
+            variant='standard'
+            type="password"
+            value= {password}
+            onChange={({ target }) => setPassword(target.value)}
+            style={{ marginTop:10 }}
+          />
         </div>
-        <button type='submit'>login</button>
+        <div>
+          <Button type='submit' variant='contained' style={{ marginTop:10 }} >
+            login
+          </Button>
+        </div>
       </form>
     </div>
   )
