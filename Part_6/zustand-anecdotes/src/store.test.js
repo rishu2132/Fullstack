@@ -1,5 +1,5 @@
 import { describe, it, beforeEach,vi, expect } from "vitest"
-import { renderHook, act } from "@testing-library/react"
+import { renderHook, act, render,screen } from "@testing-library/react"
 
 vi.mock('./services/anecdotes',() => ({
     default: {
@@ -11,6 +11,7 @@ vi.mock('./services/anecdotes',() => ({
 
 import anecdoteService from './services/anecdotes'
 import useAnecdoteStore, {useAnecdoteActions, useAnecdotes} from "./store"
+import AnecdoteList from "./components/AnecdoteList"
 
 
 
@@ -32,5 +33,23 @@ describe('verify the state of anecdotes', () => {
 
         const {result: anecdotesResult} = renderHook(() => useAnecdotes())
         expect(anecdotesResult.current).toEqual(mockAnecdote)
+    })
+
+    describe('useAnecdotes filtering', () => {
+        const anecdotes = [
+            {id:1, content: 'the' , votes:2},
+            {id:2, content: 'so', votes:3},
+            {id:3, content: 'right', votes:0}
+        ]
+
+        beforeEach(() => {
+            useAnecdoteStore.setState({ anecdotes })
+        })
+
+        it('filters anecdote', () => {
+            useAnecdoteStore.setState({ anecdotes, filter:'so'})
+            const {result} = renderHook(() => useAnecdotes())
+            expect(result.current).toEqual([anecdotes[1]])
+        })
     })
 })
