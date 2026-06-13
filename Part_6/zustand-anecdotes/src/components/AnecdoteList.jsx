@@ -1,4 +1,5 @@
 import { useAnecdotes, useAnecdoteActions, useFilter } from "../store"
+import { useNotificationActions } from "../store"
 
 const AnecdoteList = () => {
     const anecdotes = useAnecdotes()
@@ -6,15 +7,18 @@ const AnecdoteList = () => {
     const sortedAnecdotes = anecdotes.toSorted((a,b) => b.votes - a.votes)
     const filteredAnecdotes = sortedAnecdotes.filter(anecdote => anecdote.content.includes(filter))
     const {voteIncrement} = useAnecdoteActions()
+    const {setNotification} = useNotificationActions()
     return (
         <div>
-            <h2>Anecdotes</h2>
             {filteredAnecdotes.map(anecdote => (
             <div key={anecdote.id}>
                 <div>{anecdote.content}</div>
                 < div>
                  has {anecdote.votes}
-                    <button onClick={() => voteIncrement(anecdote.id)}>vote</button>
+                    <button onClick={() => {
+                        voteIncrement(anecdote.id)
+                        setNotification(`You voted "${anecdote.content}"`)
+                        }}>vote</button>
                 </div>
             </div>
             ))}

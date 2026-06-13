@@ -20,10 +20,25 @@ const useAnecdoteStore = create((set,get) => ({
     initialize: async () => {
       const anecdotes = await anecdoteService.getAll()
       set(() => ({ anecdotes }))
-    }
+    },
+    
   },
+}))
+
+const useNotificationStore = create((set) => ({
+  notification:'render here notification',
+  actions: {
+    setNotification: (value) => { 
+      set(() => ({notification:value}))
+      setTimeout(() => {
+        set(() => ({notification: null}))
+      },5000)
+    },
+  }
 }))
 
 export const useAnecdotes = () => useAnecdoteStore((state) => state.anecdotes)
 export const useFilter = () => useAnecdoteStore(state => state.filter)
 export const useAnecdoteActions = () => useAnecdoteStore((state) => state.actions)
+export const useNotification = () => useNotificationStore(state => state.notification)
+export const useNotificationActions = () => useNotificationStore(state => state.actions)
