@@ -10,7 +10,10 @@ const useAnecdoteStore = create((set) => ({
     voteIncrement: (id) => set(state => ({anecdotes: state.anecdotes.map(anecdote => (
       anecdote.id === id? {...anecdote,votes: anecdote.votes + 1} : anecdote
     ))})),
-    createNew: (anecdote) => set(state => ({anecdotes: state.anecdotes.concat(anecdote)})),
+    createNew: async (content) => {
+      const newAnecdote = await anecdoteService.createNew(content)
+      set((state) => ({anecdotes: state.anecdotes.concat(newAnecdote) }))
+    },
     setFilter: (value) => set(() => ({filter:value})),
     initialize: async () => {
       const anecdotes = await anecdoteService.getAll()
