@@ -15,6 +15,7 @@ import AnecdoteList from "./components/AnecdoteList"
 
 
 
+
 beforeEach(() => {
     useAnecdoteStore.setState({anecdotes: [], filter: ''})
     vi.clearAllMocks()
@@ -51,6 +52,23 @@ describe('verify the state of anecdotes', () => {
         const { result: anecdotesResult} = renderHook(() => useAnecdotes())
         expect(anecdotesResult.current[0].content).toEqual('High voted anecdote')
     }) 
+
+    it('voting increases the number of votes', async () => {
+         const mockAnecdote = {id:1, content: 'Low voted anecdote', votes:2}
+         
+        useAnecdoteStore.setState({ anecdotes: [mockAnecdote]})
+        anecdoteService.update.mockResolvedValue({...mockAnecdote,votes:3})
+
+        const { result } = renderHook(() => useAnecdoteActions())
+
+        await act(async() => {
+            await result.current.initialize()
+            await result.current.voteIncrement(1)
+        })
+
+        const {result: anecdotesResult} = renderHook(() => useAnecdotes())
+        expect(anecdotesResult.current[1].votes).toEqual(3)
+    })
 
     describe('useAnecdotes filtering', () => {
         const anecdotes = [
