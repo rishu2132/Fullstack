@@ -1,5 +1,5 @@
-import Display from './Display'
-import Control from './Control'
+import Display from './components/Display'
+import Control from './components/Control'
 
 const App = () => {
   
