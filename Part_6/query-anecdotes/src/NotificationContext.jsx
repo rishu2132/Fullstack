@@ -7,8 +7,14 @@ export default NotificationContext
 export const NotificationContextProvider = (props) => {
     const [notification,setNotification] = useState(null)
 
+    const notifyMessage = (message) => {
+        setNotification(message)
+        setTimeout(() => {
+            setNotification(null)
+        },5000)
+    }
     return (
-        <NotificationContext.Provider value={{ notification,setNotification}}>
+        <NotificationContext.Provider value={{ notification,setNotification,notifyMessage}}>
             {props.children}
         </NotificationContext.Provider>
     )
