@@ -19,6 +19,11 @@
       "content": "hello",
       "important": true,
       "id": "XjtIV5v-gzY"
+    },
+    {
+      "content": "is it working out?",
+      "important": false,
+      "id": "jjMvlCQwWqM"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
