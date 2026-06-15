@@ -4,9 +4,9 @@ import { useField } from '../hooks/useField'
 const CreateNew = ({ addAnecdote }) => {
 
   const navigate = useNavigate()
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const {reset: resetContent, ...content}= useField('text')
+  const {reset: resetAuthor, ...author} = useField('text')
+  const {reset: resetInfo, ...info} = useField('text')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -15,9 +15,9 @@ const CreateNew = ({ addAnecdote }) => {
   }
 
   const handleReset = () => {
-    content.reset()
-    author.reset()
-    info.reset()
+    resetAuthor()
+    resetContent()
+    resetInfo()
   }
 
   return (
