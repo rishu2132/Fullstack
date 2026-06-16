@@ -7,10 +7,10 @@ import CreateNew from './components/CreateNew'
 import { useAnecdote } from './hooks/useAnecdote'
 
 const App = () => {
-  const {anecdotes} = useAnecdote()
+  const {anecdotes, addAnecdote: addAnecdoteToServer} = useAnecdote()
 
   const addAnecdote = (anecdote) => {
-    console.log(anecdote)
+   addAnecdoteToServer(anecdote)
   }
   return (
     <Router>
