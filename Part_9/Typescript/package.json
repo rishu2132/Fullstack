@@ -1,0 +1,16 @@
+{
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
+    "multiply": "tsc && node multiplier.ts"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
