@@ -1,3 +1,24 @@
+interface duration {
+    hours: number[];
+    target: number; 
+}
+
+
+
+const calculatorArguments = (args: string[]): duration => {
+    if (args.length < 4) throw new Error ('not enough arguments')
+    
+    const data = args.slice(2);
+    const allNumbers = data.map(d => Number(d));
+    if(allNumbers.some(isNaN)) throw new Error ('all provided values must be number');
+    const [target,...hours] = allNumbers;
+    return {
+        target,
+        hours
+    }
+}
+
+
 interface Result {
     periodLength: number;
     trainingDays: number;
@@ -45,4 +66,14 @@ const calculateExercises = (data:number[],target:number): Result => {
     
 }
 
-console.log(calculateExercises([3,0,2,4.5,3,0,1],2))
+try {
+    const {target, hours} = calculatorArguments(process.argv);
+    console.log(calculateExercises(hours,target));
+
+} catch (error: unknown) {
+    let errorMessage = 'something went wrong: ';
+    if (error instanceof Error){
+        errorMessage += error.message;
+    }
+    console.log(errorMessage);
+}
