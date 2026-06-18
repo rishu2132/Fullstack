@@ -1,8 +1,8 @@
 // ! creating your own types
 
-type Operation = 'mulitply' | 'add' | 'divide';
+export type Operation = 'mulitply' | 'add' | 'divide';
 
-const calculator = (a: number, b: number, op:Operation): number => {
+export const calculator = (a: number, b: number, op:Operation): number => {
     switch(op) {
         case 'mulitply':
             return a*b;
@@ -14,7 +14,7 @@ const calculator = (a: number, b: number, op:Operation): number => {
         default:
             throw new Error('Operation is not multiply , add and divide');
     }
-}
+};
 
 try {
     console.log(calculator(1,5,'divide'));

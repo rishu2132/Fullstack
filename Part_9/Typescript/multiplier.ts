@@ -11,16 +11,16 @@ const parseArguments = (args: string[]): MultiplyValues=>{
         return {
             value1: Number(args[2]),
             value2: Number(args[3])
-        }
+        };
     } else {
         throw new Error ('Provided values are not numbers!');
     }
-}
+};
 
 
 const multiplicator = (a: number,b:number ,printText:string) => {
     console.log(printText,a*b);
-}
+};
 
 try {
     const {value1, value2} = parseArguments(process.argv);
