@@ -29,7 +29,7 @@ interface Result {
     average: number;
 }
 
-const calculateExercises = (data:number[],target:number): Result => {
+export const calculateExercises = (data:number[],target:number): Result => {
 
     if(data.length < 1 && target <= 0){
         throw new Error ('not valid data ');
@@ -66,7 +66,8 @@ const calculateExercises = (data:number[],target:number): Result => {
     
 };
 
-try {
+if (process.argv[1]=== import.meta.filename){
+    try {
     const {target, hours} = calculatorArguments(process.argv);
     console.log(calculateExercises(hours,target));
 
@@ -77,3 +78,5 @@ try {
     }
     console.log(errorMessage);
 }
+}
+
