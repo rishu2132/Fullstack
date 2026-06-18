@@ -6,7 +6,7 @@ interface duration {
 
 
 const calculatorArguments = (args: string[]): duration => {
-    if (args.length < 4) throw new Error ('not enough arguments')
+    if (args.length < 4) throw new Error ('not enough arguments');
     
     const data = args.slice(2);
     const allNumbers = data.map(d => Number(d));
@@ -15,8 +15,8 @@ const calculatorArguments = (args: string[]): duration => {
     return {
         target,
         hours
-    }
-}
+    };
+};
 
 
 interface Result {
@@ -32,7 +32,7 @@ interface Result {
 const calculateExercises = (data:number[],target:number): Result => {
 
     if(data.length < 1 && target <= 0){
-        throw new Error ('not valid data ')
+        throw new Error ('not valid data ');
     }
     const periodLength = data.length;
     const trainingDays = data.filter(h => h > 0).length;
@@ -62,9 +62,9 @@ const calculateExercises = (data:number[],target:number): Result => {
             rating,
             ratingDescription
 
-        }
+        };
     
-}
+};
 
 try {
     const {target, hours} = calculatorArguments(process.argv);

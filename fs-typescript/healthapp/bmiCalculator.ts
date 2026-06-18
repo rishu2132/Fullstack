@@ -5,20 +5,20 @@ interface unit {
 
 const parseArguments = (args: string[]): unit => {
     if (args.length < 4) throw new Error ('not enough arguments, need 2 arguments');
-    if (args.length > 4) throw new Error ('too many arguments, need only 2 arguments')
+    if (args.length > 4) throw new Error ('too many arguments, need only 2 arguments');
 
     if(!isNaN(Number(args[2])) && !isNaN(Number(args[3]))){
         return {
             height: Number(args[2]),
             weight: Number(args[3])
-        }
+        };
     } else {
         throw new Error ('Provided values are not numbers!');  
     }
-}
+};
 
 
-const calculateBmi = (height:number, weight:number):String => {
+const calculateBmi = (height:number, weight:number):string => {
     const bmi: number = weight/(height/100)**2;
 
     if(bmi<16)return 'Underweight (Severe thinness';
@@ -29,8 +29,8 @@ const calculateBmi = (height:number, weight:number):String => {
     else if(bmi < 35) return 'Obese (Class I)';
     else if(bmi < 40) return 'Obese (Class II)';
     else if(bmi>=40) return 'Obese (Class III)';
-    else throw new Error('given height or weight are not numbers')
-}
+    else throw new Error('given height or weight are not numbers');
+};
 
 
 if (process.argv[1] === import.meta.filename){
@@ -46,4 +46,4 @@ if (process.argv[1] === import.meta.filename){
     }
 }
 
-export default calculateBmi
+export default calculateBmi;

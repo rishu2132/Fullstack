@@ -3,8 +3,8 @@ import calculateBmi from './bmiCalculator.ts';
 const app = express();
 
 app.get('/hello', (_req,res) =>{
-    res.send('Hello Full Stack!')
-})
+    res.send('Hello Full Stack!');
+});
 
 app.get('/bmi', (req,res) =>{
     const weight = Number(req.query.weight);
@@ -19,11 +19,11 @@ app.get('/bmi', (req,res) =>{
         weight,
         height,
         bmi
-    })
-})
+    });
+});
 
 const PORT = 3003;
 
 app.listen(PORT, () => {
-    console.log(`server is running on port ${PORT}`)
-})
+    console.log(`server is running on port ${PORT}`);
+});
