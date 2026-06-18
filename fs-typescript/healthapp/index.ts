@@ -13,7 +13,11 @@ app.get('/bmi', (req,res) =>{
     const height = Number(req.query.height);
 
     if(isNaN(weight) || isNaN(height)){
-        res.send({error:'malformatted parameters '});
+        res.status(400).send({error: 'malformatted parameters'});
+    }
+
+    if(!weight || !height){
+        res.status(400).send({error: 'missing parameters'});
     }
 
     const bmi = calculateBmi(height,weight);
@@ -29,14 +33,14 @@ app.post('/exercises', (req, res) => {
     const {daily_exercises, target} = req.body;
 
     if(!target || !daily_exercises){
-     res.send({error: 'parameters missing'});
+     res.status(400).send({error: 'parameters missing'});
     }
     
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const allNumbers = daily_exercises.map(Number);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     if (isNaN(Number(target)) || allNumbers.some(isNaN) ){
-        res.send({error: 'malformatted parameters'});
+        res.status(400).send({error: 'malformatted parameters'});
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
