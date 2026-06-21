@@ -1,7 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import noteService from '../services/notes'
-import { Table, TableBody, TableCell, TableHead , TableContainer, TableRow, Paper  } from '@mui/material'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableContainer from '@mui/material/TableContainer'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
 
 const NoteList = ({ notes }) => {
   const [showAll, setShowAll] = useState(true)
@@ -45,7 +50,7 @@ const NoteList = ({ notes }) => {
                   <Link to={`/notes/${note.id}`}>{note.content}</Link>
                 </TableCell>
                 <TableCell>
-                  {note.user.name}
+                  {note.user?.name}
                 </TableCell>
                 <TableCell>
                   {note.important ? 'yes':''}
