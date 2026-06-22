@@ -9,6 +9,7 @@ import './index.css'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -117,10 +118,11 @@ const App = () => {
         <Notification notification={notification}/>
 
         <Routes>
-          <Route path='/create' element={<BlogForm createBlog={addNewBlog}/>}/>
-          <Route path='/:id' element={<Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/>}/>
-          <Route path='/' element={<BlogList blogs={blogs} />}/>
-          <Route path='/login' element={<LoginForm handleLogin={handleLogin}/>}/>
+
+          <Route path='/create' element={<ErrorBoundary><BlogForm createBlog={addNewBlog}/></ErrorBoundary>}/>
+          <Route path='/:id' element={<ErrorBoundary><Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/></ErrorBoundary>}/>
+          <Route path='/' element={<ErrorBoundary><BlogList blogs={blogs} /></ErrorBoundary>}/>
+          <Route path='/login' element={<ErrorBoundary><LoginForm handleLogin={handleLogin}/></ErrorBoundary>}/>
         </Routes>
       </Container>
     </div>

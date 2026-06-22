@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { Card, CardActions, CardContent, Box, Button, Typography } from '@mui/material'
 
 
-const Blog = ({ blog, updateLikes, removeBlog, user }) => {
 
+const Blog = ({ blog, updateLikes, removeBlog, user }) => {
   const increaseLike = (blog) => {
     const updatedBlog = ({ ...blog, likes:blog.likes + 1 })
     updateLikes(updatedBlog)

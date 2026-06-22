@@ -5,6 +5,7 @@ import Blog from './Blog'
 const BlogList = ({ blogs }) => {
 
   return (
+
     <div>
       <h2>blogs</h2>
 
