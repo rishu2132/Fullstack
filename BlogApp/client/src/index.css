@@ -1,0 +1,20 @@
+.greenError {
+  color: green;
+  background: lightgrey;
+  font-size: 15px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid green;
+  margin-bottom:10px;
+
+}
+
+.redError {
+  color: red;
+  background: lightgrey;
+  font-size: 15px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid red;
+  margin-bottom:10px;
+}
