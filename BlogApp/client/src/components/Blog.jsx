@@ -22,7 +22,9 @@ const Blog = ({ blog, updateLikes, removeBlog, user }) => {
   }
 
   if(!blog){
-    return null
+    return (
+      <h2>404 - Page Not Found</h2>
+    )
   }
 
   return (

@@ -10,6 +10,7 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import ErrorBoundary from './components/ErrorBoundary'
+import { NotFound } from './components/NotFound'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -119,16 +120,16 @@ const App = () => {
 
         <Routes>
 
+
           <Route path='/create' element={<ErrorBoundary><BlogForm createBlog={addNewBlog}/></ErrorBoundary>}/>
           <Route path='/:id' element={<ErrorBoundary><Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/></ErrorBoundary>}/>
           <Route path='/' element={<ErrorBoundary><BlogList blogs={blogs} /></ErrorBoundary>}/>
           <Route path='/login' element={<ErrorBoundary><LoginForm handleLogin={handleLogin}/></ErrorBoundary>}/>
+          <Route path='*' element={ <NotFound/> }/>
         </Routes>
       </Container>
     </div>
   )
-
-
 
 }
 
