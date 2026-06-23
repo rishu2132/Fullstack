@@ -1,6 +1,13 @@
-import { useState, useEffect, } from 'react'
-import { BrowserRouter as Router, Routes , Route , Link , useNavigate, useMatch } from 'react-router-dom'
-import { Container,Toolbar,AppBar,Button, Typography } from '@mui/material'
+import { useState, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useMatch,
+} from 'react-router-dom'
+import { Container, Toolbar, AppBar, Button, Typography } from '@mui/material'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -23,34 +30,33 @@ const App = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a,b) => b.likes - a.likes) )
-    )
+    blogService
+      .getAll()
+      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
   }, [])
-
 
   const handleLogin = async (username, password) => {
     console.log('logging in ', username)
 
     try {
-      const user = await loginService.login({ username,password })
+      const user = await loginService.login({ username, password })
       window.localStorage.setItem('LoggedBlogUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setNotification({ text: `${username} logged in`, type:'success' })
+      setNotification({ text: `${username} logged in`, type: 'success' })
       setTimeout(() => {
         setNotification(null)
-      },5000)
+      }, 5000)
     } catch {
-      setNotification({ text:'wrong username or password', type:'error' })
+      setNotification({ text: 'wrong username or password', type: 'error' })
       setTimeout(() => {
         setNotification(null)
-      },5000)
+      }, 5000)
     }
   }
 
   const handleLogout = () => {
-    if(user !== null){
+    if (user !== null) {
       window.localStorage.removeItem('LoggedBlogUser')
       setUser(null)
       console.log('logged out')
@@ -60,28 +66,26 @@ const App = () => {
   }
 
   const match = useMatch('/:id')
-  const blog = match
-    ? blogs.find(blog => blog.id === match.params.id)
-    : null
-
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   const addNewBlog = async (blogObject) => {
     console.log(blogObject)
 
     const returnedData = await blogService.create(blogObject)
-    setBlogs(prev => prev.concat({ ...returnedData, user:user }))
-    setNotification({ text: `a new blog ${returnedData.title} by ${returnedData.author} added`, type:'success' })
+    setBlogs((prev) => prev.concat({ ...returnedData, user: user }))
+    setNotification({
+      text: `a new blog ${returnedData.title} by ${returnedData.author} added`,
+      type: 'success',
+    })
     setTimeout(() => {
       setNotification(null)
-    },5000)
+    }, 5000)
   }
 
-
   const updateLikes = async (blogObject) => {
-
     await blogService.updateLike(blogObject)
     const updatedblogs = await blogService.getAll()
-    const sortedBlogs = updatedblogs.sort((a,b) => b.likes - a.likes)
+    const sortedBlogs = updatedblogs.sort((a, b) => b.likes - a.likes)
     setBlogs(sortedBlogs)
   }
 
@@ -99,38 +103,76 @@ const App = () => {
   return (
     <div>
       <Container>
-        <AppBar position='static' style={{ display:'flex' }}>
+        <AppBar position="static" style={{ display: 'flex' }}>
           <Toolbar>
-            <Typography variant='h6' style={{ flexGrow:1 }}>
+            <Typography variant="h6" style={{ flexGrow: 1 }}>
               Blog App
             </Typography>
-            <Button color='inherit' component={Link} to='/' sx={style}>Blogs</Button>
-            {user
-              ? <Button color='inherit' component={Link} to='/create' sx={style}>new Blog</Button>
-              : null
-            }
-            {user
-              ? <Button color='inherit' sx={style} onClick={handleLogout}>logout</Button>
-              :<Button color='inherit' component={Link} to='/login' sx={style}>login</Button>
-            }
+            <Button color="inherit" component={Link} to="/" sx={style}>
+              Blogs
+            </Button>
+            {user ? (
+              <Button color="inherit" component={Link} to="/create" sx={style}>
+                new Blog
+              </Button>
+            ) : null}
+            {user ? (
+              <Button color="inherit" sx={style} onClick={handleLogout}>
+                logout
+              </Button>
+            ) : (
+              <Button color="inherit" component={Link} to="/login" sx={style}>
+                login
+              </Button>
+            )}
           </Toolbar>
         </AppBar>
 
-        <Notification notification={notification}/>
+        <Notification notification={notification} />
 
         <Routes>
-
-
-          <Route path='/create' element={<ErrorBoundary><BlogForm createBlog={addNewBlog}/></ErrorBoundary>}/>
-          <Route path='/:id' element={<ErrorBoundary><Blog blog={blog} user={user} updateLikes={updateLikes} removeBlog={removeBlog}/></ErrorBoundary>}/>
-          <Route path='/' element={<ErrorBoundary><BlogList blogs={blogs} /></ErrorBoundary>}/>
-          <Route path='/login' element={<ErrorBoundary><LoginForm handleLogin={handleLogin}/></ErrorBoundary>}/>
-          <Route path='*' element={ <NotFound/> }/>
+          <Route
+            path="/create"
+            element={
+              <ErrorBoundary>
+                <BlogForm createBlog={addNewBlog} />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/:id"
+            element={
+              <ErrorBoundary>
+                <Blog
+                  blog={blog}
+                  user={user}
+                  updateLikes={updateLikes}
+                  removeBlog={removeBlog}
+                />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ErrorBoundary>
+                <BlogList blogs={blogs} />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <ErrorBoundary>
+                <LoginForm handleLogin={handleLogin} />
+              </ErrorBoundary>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
     </div>
   )
-
 }
 
 export default App

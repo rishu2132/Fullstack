@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { useNavigate , Link } from 'react-router-dom'
-import { Button,TextField } from '@mui/material'
-
+import { useNavigate, Link } from 'react-router-dom'
+import { Button, TextField } from '@mui/material'
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
 
   const navigate = useNavigate()
 
@@ -31,9 +29,6 @@ const LoginForm = ({ handleLogin }) => {
   //     }
   //   }
 
-
-
-
   return (
     <div>
       <h2>Log in to application</h2>
@@ -41,32 +36,31 @@ const LoginForm = ({ handleLogin }) => {
       <form onSubmit={handleSubmit}>
         <div>
           <TextField
-            label='username'
-            variant='standard'
+            label="username"
+            variant="standard"
             type="text"
-            value = {username}
-            onChange = {({ target }) => setUsername(target.value)}
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div>
           <TextField
-            label='password'
-            variant='standard'
+            label="password"
+            variant="standard"
             type="password"
-            value= {password}
+            value={password}
             onChange={({ target }) => setPassword(target.value)}
-            style={{ marginTop:10 }}
+            style={{ marginTop: 10 }}
           />
         </div>
         <div>
-          <Button type='submit' variant='contained' style={{ marginTop:10 }} >
+          <Button type="submit" variant="contained" style={{ marginTop: 10 }}>
             login
           </Button>
         </div>
       </form>
     </div>
   )
-
 }
 
 export default LoginForm
