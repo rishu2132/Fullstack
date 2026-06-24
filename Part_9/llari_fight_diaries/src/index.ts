@@ -1,4 +1,5 @@
 import express from "express";
+import diaryRouter from "./routes/diaries.ts";
 
 const app = express();
 app.use(express.json());
@@ -9,6 +10,8 @@ app.get('/ping',(_req, res) => {
     console.log('someone pinged here');
     res.send('ping');
 });
+
+app.use('/api/diaries', diaryRouter );
 
 app.listen(PORT, () => {
     console.log(`server is running in port ${PORT}`);
